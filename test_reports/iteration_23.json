@@ -1,0 +1,55 @@
+{
+  "summary": "Phase-3 frontend regression for the 8 PROCUREMENT (3) + INVENTORY (5) list pages migrated to the shared DataTable primitive. Logged in as admin@torado.id, walked each route, asserted page render, sortable column toggling (asc/desc), row expand → drill-down testid presence with REAL non-empty data, drill-down round-trip (expand/collapse), and row-action buttons (clickable + stopPropagation so they don't toggle the row). 7/8 pages fully validated with live data; 1/8 (Stock Opname) renders the empty-state correctly because the seeded DB has 0 opname sessions. No pageerrors / no blank screens. One real defect found: Stock Balance triggers a React hydration error (nested <button> inside <button>) because two of its DataTable sort headers embed InlineHelp (which is itself a <button>).",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "StockBalance (/inventory/balance)",
+        "issue": "Nested <button> hydration error: the 'Qty' and 'Total Value' column labels embed an InlineHelp component (which renders its own <button>) and the DataTable wraps sortable headers in a <button data-testid='bal-row-sort-qty/total_value'>. Result is <button><button/></button>, which React flags as a hydration error and is invalid HTML. Captured in console: '<button> cannot contain a nested <button>'. Page still functions visually but DOM is invalid and assistive-tech / future React strict-mode versions will break.",
+        "selector": "[data-testid='bal-row-sort-qty'] button, [data-testid='bal-row-sort-total_value'] button",
+        "priority": "MEDIUM"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "verification_per_feature": {
+    "Login": "PASS — admin@torado.id / Torado@2026 → /portal-select.",
+    "PROC_PR": "FULL PASS — /procurement/pr renders [pr-list-page]. 20 rows present. Sort [pr-sort-lines] toggles asc→desc OK. Expanded first row → [pr-lines-<id>] drilldown 'Baris Item (1)' with columns Item/Qty/Unit/Est.Harga/Subtotal/Catatan rendered (real data). [pr-view-<id>] action link present and stopPropagation works. Collapse round-trip OK. Note: [pr-sort-total] is not the right key — the total column header is actually keyed differently (sort still works via other columns; not a defect, just naming).",
+    "PROC_PO": "FULL PASS — /procurement/po renders [po-list-page]. 20 rows. Sort [po-sort-lines] toggles asc→desc. Expand → [po-lines-<id>] 'Baris Item (1)' with Item/Qty/Unit/Harga Satuan/Total — REAL data (e.g. 'Teh Hitam Premium · 37 pack · Rp 33.100 · Rp 1.224.700'). [po-view-<id>] link present. Collapse round-trip OK.",
+    "PROC_VendorScorecard": "FULL PASS — /procurement/vendor-scorecard renders [vendor-scorecard-page]. 6 vendor rows. Sort [scorecard-row-sort-po_count] toggles asc→desc. Expand → [scorecard-breakdown-<vid>] 'Rincian KPI Vendor' with On-Time Delivery +100.0%, Jumlah PO 5, Total Nilai Rp 0, Composite Score 97 · Excellent, plus 'Buka detail lengkap' link [scorecard-fulldetail-<vid>]. [scorecard-detail-<vid>] action present. Collapse OK.",
+    "INV_StockBalance": "PASS (with hydration warning) — /inventory/balance renders [stock-balance-page]. 46 item×outlet rows (keyField=_key=itemid-outletid). Sort [bal-row-sort-qty] toggles asc→desc. Expand triggers LAZY FETCH of /inventory/movements?item_id&outlet_id and renders [bal-moves-<itemid>-<outletid>] 'Pergerakan Terakhir (2)' with Tanggal/Type/Qty/Unit Cost/Ref real rows (e.g. '13 Jun 2026 · sale · -7 · Rp 52.787'). Collapse OK. CONCERN: hydration error from nested <button> in Qty / Total Value sort headers (see ui_bugs).",
+    "INV_Movements": "PASS — /inventory/movements redirects to /inventory/movements-hub?type=history. [inventory-movements-page] + [movements-table-card] render. 50 atomic rows on page 1. Sort [movement-row-sort-movement_type] toggles asc→desc. No expand attempted (atomic ledger by design). KNOWN BACKEND DATA ISSUE confirmed: many rows show a raw UUID in the Item column (e.g. '5083fcef-dcd6-462d-a0bf-457cd8bd32f1') instead of item name. Per agent context this is a data-seed defect, not a migration regression.",
+    "INV_Transfers": "FULL PASS — /inventory/transfers renders [transfer-list-page] + [trf-table-card]. 20 rows. Sort [trf-row-sort-doc_no] toggles asc→desc. Expand → [trf-lines-<id>] 'Item (1)' with Item/Qty/Unit/Harga/Subtotal real columns. [trf-receive-<id>] row-action visible on appropriate rows (sent status). [trf-send-<id>] not visible on default-sorted first page because no draft rows surfaced — conditional rendering by status works as designed. Collapse OK.",
+    "INV_Adjustments": "FULL PASS — /inventory/adjustments renders ([adj-new] header CTA). 20 rows ([adj-row-<id>]). Sort [adj-row-sort-doc_no] toggles asc→desc. Expand → [adj-lines-<id>] 'Item (1)' with Item/±Qty/Unit/Harga/Subtotal/Catatan columns. Row-action: [adj-state-<id>] click opens the approval-state dialog AND the row stays expanded (stopPropagation verified). [adj-approve-<id>] + [adj-reject-<id>] present on submitted/awaiting_approval rows.",
+    "INV_Opname": "RENDER-OK / EMPTY-DATA — /inventory/opname renders [opname-list-page] + [opn-header-card] + [opn-table-card]. GET returns zero sessions in the current DB → 'Belum ada opname session' empty-state shown (acceptable per spec). Drill-down [opn-variance-<id>] lazy-fetch and [opn-view-<id>] action wired in code (verified by inspection) but could not be live-exercised. NO crash.",
+    "GENERAL_NoCrash": "PASS — 0 pageerror events captured across all 8 routes. Every list renders body content (no blank). Expand/collapse round-trip OK on all pages with data. Row-action clicks (adj-state) confirmed NOT to toggle row expand (stopPropagation verified)."
+  },
+  "test_report_links": [],
+  "action_items": [
+    "(MEDIUM) Fix nested-button DOM error on /inventory/balance: in StockBalance.jsx columns 'qty' (line 125) and 'total_value' (line 131), the labels are JSX containing <InlineHelp> (a button). Combined with DataTable wrapping sortable headers in a <button>, this creates <button><button/></button>. Options: (a) move InlineHelp outside the sortable button (render after the label outside the <button>), (b) render InlineHelp as a non-button element, or (c) DataTable could optionally split label vs help-icon when both sortable && contains-button.",
+    "(Optional / Seed) Seed stock_opname_sessions to live-exercise the OpnameVarianceDrilldown lazy fetch + [opn-variance-<id>] + [opn-view-<id>]. Code path is wired correctly per inspection.",
+    "(Backend data, NOT migration defect) Stock Movements item-column shows raw UUID for many rows because the seeded movement docs lack a resolvable item_name. Acceptable per agent-to-agent note; recommend backfilling item_name into the projection or letting frontend resolve from itemMap.",
+    "(Minor / naming) Spec mentioned sort key 'total' for PR/PO but actual sortable keys are 'lines', 'total_amount' (or similar) and 'created_at'. Functionality is fine — just a naming mismatch in the test spec."
+  ],
+  "critical_code_review_comments": [
+    "DataTable migration is solid across all 8 pages: consistent keyField wiring, sortable flags with sortAccessor, defaultSort, renderExpanded, rowAction with stopPropagation working as designed.",
+    "Lazy-fetch drill-down pattern verified live for StockMovesDrilldown (/inventory/movements?item_id&outlet_id) — returns within ~1-2s and renders real 'Pergerakan Terakhir' table.",
+    "Inline drill-downs (PrLinesDrilldown, PoLinesDrilldown, TransferLines, AdjustmentLines, VendorScoreDrilldown) all render REAL non-empty data and respect column-spec from the request.",
+    "rowAction stopPropagation is working correctly: clicking [adj-state-<id>] opens its dialog without collapsing the row (verified end-to-end).",
+    "Hydration warning in StockBalance is the only DOM-validity defect found. It does not visually break the page but it is invalid HTML and should be fixed.",
+    "Empty-state on /inventory/opname renders correctly with no crash — acceptable per spec, but consider seeding a couple of sessions so the lazy-fetch drilldown can be regression-tested.",
+    "Movements item-column shows UUID — a data/seed issue, not a DataTable migration defect; suggest backend backfill or frontend itemMap lookup."
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "n/a (frontend-only)",
+    "frontend": "8/8 pages render without crash. 7/8 fully validated with REAL non-empty drill-down data + sort cycling + row-action verification. 1/8 (Opname) validated only at render + empty-state level because DB has 0 opname sessions."
+  },
+  "test_credentials": "admin@torado.id / Torado@2026 (SUPER_ADMIN); token persists at localStorage.aurora_access_token.",
+  "seed_data_creation": "None. Used existing seeded data — PR/PO/scorecard/balance/movements/transfers/adjustments already populated. Opname collection is empty in the current DB.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Phase-3 DataTable migration regression for 8 lists is clean. Real live drill-downs confirmed: [pr-lines-<id>], [po-lines-<id>], [scorecard-breakdown-<vid>], [bal-moves-<itemid>-<outletid>] (lazy), [trf-lines-<id>], [adj-lines-<id>]. Only unreached: [opn-variance-<id>] / [opn-view-<id>] because stock_opname_sessions has 0 rows. To live-validate Opname, seed 1-2 sessions (one with variance lines, one without — drill-down branch renders either 'Item dengan Selisih (n)' or 'Tidak ada selisih'). Open defect to fix: nested <button> hydration warning on StockBalance Qty / Total Value sort headers — InlineHelp must be moved out of the sortable header button (StockBalance.jsx lines 125 & 131).",
+  "rca of the issue": "Nested-button bug on StockBalance: DataTable wraps any column with sortable:true in a <button data-testid='<prefix>-sort-<key>'>. StockBalance defines two such columns whose 'label' prop is a JSX fragment containing an <InlineHelp/> component, which itself renders a <button>. The result is <button><button></button></button>, which React 18+ rejects (hydration error logged in console). Reproduction: visit /inventory/balance while logged in, open devtools → console shows '<button> cannot contain a nested <button>'. Mitigation: render InlineHelp adjacent to (not inside) the sortable label, e.g. wrap the header cell so the help-button sits outside the sort-button, or change InlineHelp to span/abbr-based tooltip. No other DataTable consumer in this batch was affected (other pages embed plain strings as labels)."
+}

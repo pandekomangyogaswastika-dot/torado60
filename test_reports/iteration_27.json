@@ -1,0 +1,74 @@
+{
+  "summary": "Round-1 frontend intent audit of Procurement + Inventory portals as SUPER_ADMIN (admin@torado.id). All routes render without crashes. Several genuine intent-correctness bugs found, dominated by an inventory valuation/cost-display defect that propagates across many pages (Total Value shows Rp 0 even when qty>0 and last_cost>0). Movements lists show item UUIDs instead of item names. Vendor Scorecard total value is Rp 0 despite 45 Received POs.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "InventoryHome /inventory (KPI + Recent Movements + Valuation per Outlet)", "issue": "TOTAL INVENTORY VALUE = Rp 0; Valuation per Outlet shows Rp 0 for all 5 outlets; Recent Movements list shows item UUID (e.g. '5083fcef-dcd6-462d-...') instead of item name; per-outlet card headers show outlet UUID instead of outlet name", "selector": "/inventory", "priority": "CRITICAL"},
+      {"component": "StockBalance /inventory/balance", "issue": "'Total Value' column = Rp 0 for EVERY row, even rows with positive Qty and non-zero Last Cost (e.g. Daging Sapi Has Dalam @ Calluna: qty=18, last_cost=Rp 60.523, but Total Value=Rp 0). Total Value should be qty * last_cost.", "selector": "/inventory/balance", "priority": "CRITICAL"},
+      {"component": "StockMovements /inventory/movements & /inventory/movements-hub", "issue": "Item column displays UUID instead of item name. Unit Cost & Total Cost = Rp 0 for ALL rows including purchase_receive movements (should inherit GR unit cost).", "selector": "/inventory/movements", "priority": "CRITICAL"},
+      {"component": "StockValuation /inventory/valuation", "issue": "TOTAL INVENTORY VALUE shows Rp 0. ITEM COUNT (QTY>0) = 16 but total = 0. Per-outlet all Rp 0. INTENT VIOLATION: page is supposed to show qty*cost reconciling with GL Inventory (~Rp 1.126M); current display would mislead users into thinking inventory is worthless.", "selector": "/inventory/valuation", "priority": "CRITICAL"},
+      {"component": "StockTransfers /inventory/transfers", "issue": "All 39 transfers show Total Value Rp 0 (same Altero->Bakkies, 1 line each). Even after transfers move stock, value column never reflects item cost.", "selector": "/inventory/transfers", "priority": "HIGH"},
+      {"component": "StockAdjustments /inventory/adjustments", "issue": "All 42 adjustments show Total Value Rp 0; same reason 'Opname' on every row (seed monotony) and zero valuation regardless of item cost.", "selector": "/inventory/adjustments", "priority": "HIGH"},
+      {"component": "VendorScorecard /procurement/vendor-scorecard", "issue": "Total Value = Rp 0 for ALL 6 vendors despite 45 Received POs (Toko Sayur, CV Daging Berkah, etc each have multiple POs with totals shown elsewhere). PO Count and Score render correctly; only Total Value aggregation is broken.", "selector": "/procurement/vendor-scorecard", "priority": "HIGH"},
+      {"component": "POComparison /procurement/po-comparison", "issue": "Date stamp on every PO card reads '13 Jun 2026' (likely 'today') instead of the PO order date that PO List correctly shows (e.g. PO-DEMO-0045 = 10 Jun 2026 on list but 13 Jun 2026 here).", "selector": "/procurement/po-comparison", "priority": "MEDIUM"},
+      {"component": "PriceIntelligence /procurement/price-intelligence", "issue": "All KPI counters = 0 and table shows 'Belum ada data price intelligence. Buat PO atau GR terlebih dahulu agar data vendor terupdate.' — but 45 POs and 38 GRs already exist. Either the aggregation job hasn't been triggered or the lookup query is wrong; this is likely a real bug, not an empty seed.", "selector": "/procurement/price-intelligence", "priority": "HIGH"},
+      {"component": "LowStock /inventory/low-stock", "issue": "49 items flagged Critical with NEGATIVE qty (e.g. Ayam Fillet Dada @ Altero qty=-59). Indicates initial-stock / opening-balance seed is missing OR sales/wastage events were posted without prior purchase_receive bringing stock in. Not a UI bug per se but suggests data integrity issue worth flagging upstream.", "selector": "/inventory/low-stock", "priority": "MEDIUM"},
+      {"component": "PR/PO/GR List tables", "issue": "Rows do NOT carry data-testid='pr-row-{id}' / 'po-row-{id}' / 'gr-row-{id}' that DataTable.jsx pattern documents. These lists still use the older table component, so automated row-click tests cannot find rows by testid. Detail navigation works via 'Detail' link only.", "selector": "tr in /procurement/pr, /procurement/po, /procurement/gr", "priority": "MEDIUM"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Stock Movements / Movements Hub", "issues": ["Showing raw UUIDs in a user-facing list is a UX defect — should resolve to item_name. Same column repeats for all 20 visible rows making the list non-actionable for auditors."]},
+      {"screen": "Inventory Home Valuation per Outlet", "issues": ["Outlet identifiers shown as UUIDs instead of outlet names (Calluna, Bakkies, etc.)"]},
+      {"screen": "Stock Transfers", "issues": ["All 39 rows are Altero->Bakkies / 1 line / Rp 0 — high seed monotony; consider varied seed for realistic UX."]}
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Fix inventory valuation propagation: ensure movements API returns unit_cost/total_cost (currently 0) AND stock balance computes total_value = qty * last_cost. Suspect inventory_service.compute_balance is not joining cost or item cost is 0 in master data.",
+    "Resolve item_id -> item.name and outlet_id -> outlet.name in /inventory and /inventory/movements responses (or on FE serializer).",
+    "Vendor Scorecard: aggregate sum(po.grand_total) per vendor (currently Rp 0); 45 POs exist.",
+    "PO Comparison: replace card date with po.order_date (currently rendering current date).",
+    "Price Intelligence: trigger/repair aggregation job — page should populate now that PO+GR exist.",
+    "Investigate negative on-hand qty across 49 stock-balance rows — likely missing opening-balance seed; either back-seed initial purchase_receive or block sale postings when stock<=0.",
+    "Add data-testid=pr-row-{id}/po-row-{id}/gr-row-{id} to PR/PO/GR list rows to align with DataTable pattern from /app/frontend/src/components/shared/DataTable.jsx."
+  ],
+  "critical_code_review_comments": [
+    "Inventory valuation is the single biggest correctness blocker; once cost data flows from purchase_receive movements into the running cost (moving avg / last_cost) used by /balance and /valuation, six downstream pages will fix themselves.",
+    "Mixing UUID-as-display in production lists (movements, recent movements card, valuation cards) suggests the inventory router/service serializers strip out the lookup join. Either denormalize at write-time or add item/outlet $lookup in aggregation pipeline.",
+    "PR/PO/GR list pages should migrate to shared DataTable.jsx so testability (data-testid row pattern) + uniform sort/pagination is honored."
+  ],
+  "updated_files": [],
+  "success_rate": { "backend": "n/a (skipped per request)", "frontend": "Render: 100%; Intent-correctness: ~60% (10 of ~25 audited views show wrong/missing data)" },
+  "test_credentials": "admin@torado.id / Torado@2026 (SUPER_ADMIN) — login OK via login-email/login-password/login-submit.",
+  "seed_data_creation": "None. Used existing demo DB. Observed counts: 102 PRs / 45 POs (all Received) / 38-43 GRs / 39 Transfers / 42 Adjustments / 13 items in catalog (16 reported as qty>0 by inventory home — discrepancy worth noting) / 6 vendors / 5 outlets.",
+  "retest_needed": true,
+  "main_agent_can_self_test": false,
+  "context_for_next_testing_agent": "Round-2 should re-audit Inventory (valuation, balance, movements, valuation-per-outlet, vendor-scorecard) after the cost-propagation fix. Also confirm UUIDs replaced by names in /inventory home Recent Movements card. Procurement happy-path renders correctly — focus retest on Price Intelligence, Vendor Scorecard, PO Comparison dates. PR/PO list rows still need data-testid row pattern for future Playwright scripts.",
+  "verified_findings": {
+    "procurement_home": {"pr_pending": 87, "pr_total": 102, "po_open": 0, "po_total": 45, "gr_posted": 38, "renders": true},
+    "pr_list": {"total_rows": 102, "status_filters_present": true, "pagination": "1/6", "search_input_present": false, "row_testid_pattern": "MISSING"},
+    "pr_detail_PR-2606-0144": {"renders": true, "line_items_visible": true, "qty": 1, "est_cost": "Rp 0 (seed has no price)", "subtotal": "Rp 0", "approval_state": "Submitted, Tier 1"},
+    "pr_new": {"renders": true, "outlet_brand_source_selects_present": true, "line_add_button_present": true, "compute_visible": true},
+    "po_list": {"total_rows": 45, "all_status": "Received"},
+    "po_detail_PO-DEMO-0045": {"vendor": "Toko Sayur Pasar Induk", "delivery_to": "Bakkies", "lines": [{"item":"Teh Hitam Premium","qty":37,"unit_cost":33100,"total":1224700}], "grand_total": 1224700, "math_correct": true},
+    "po_comparison": {"renders": true, "all_card_dates_say_13_Jun_2026": "BUG"},
+    "vendor_comparison": {"renders": true, "item_picker_count": 13},
+    "vendor_catalog": {"renders": true, "vendor_count": 6},
+    "price_intelligence": {"renders": true, "all_kpis_zero": "BUG (data should exist)"},
+    "vendor_scorecard": {"renders": true, "po_counts_correct": true, "total_value_all_zero": "BUG"},
+    "rfq": {"renders": true, "empty_state": "expected"},
+    "kanban": {"renders": true, "card_distribution": "PR Draft 0 / PR Pending 87 / PR Approved 6 / PO Sent 0 / PO Received 45 (138 total)"},
+    "gr_list": {"renders": true, "rows_visible": 38},
+    "gr_new": {"renders": true, "vendor_outlet_pickers_present": true, "compute_section_present": true},
+    "inventory_home": {"total_inventory_value": 0, "BUG": "Rp 0 across all outlets despite 38 GRs; Recent Movements shows item UUIDs"},
+    "stock_balance": {"renders": true, "total_value_column_all_zero": "BUG", "negative_qty_rows_present": true},
+    "stock_movements": {"renders": true, "item_displayed_as_uuid": "BUG", "unit_cost_all_zero": "BUG"},
+    "stock_valuation": {"total_value_displayed": "Rp 0", "BUG_intent_violation": "Page misleads — should show ~Rp 1.126M per GL or at minimum non-zero"},
+    "low_stock": {"total_below_par": 49, "critical": 49, "low": 0, "DATA_ISSUE": "all 49 items have negative qty — missing opening balance seed"},
+    "transfers": {"total": 39, "all_value_zero": "BUG"},
+    "adjustments": {"total": 42, "all_value_zero": "BUG"},
+    "opname": {"empty_state": "expected"},
+    "market_list": {"items": 13, "ref_price": "Belum ada (acceptable empty seed)"}
+  },
+  "rca of the issue": "The inventory valuation defect is the dominant root cause. Movements API returns unit_cost=0 for purchase_receive movements; downstream services (balance.total_value, valuation page, vendor scorecard total, transfer value, adjustment value) all multiply by 0 -> Rp 0 everywhere. Likely fix points: (a) services/inventory_service.py when posting a purchase_receive must record movement.unit_cost from the GR line; (b) compute_balance should set total_value = qty * last_cost; (c) the movements serializer must $lookup item_name + outlet_name OR the FE must resolve IDs from a local cache. Secondary issues (vendor scorecard total, price intelligence empty, PO comparison date) are independent and need their own fixes."
+}

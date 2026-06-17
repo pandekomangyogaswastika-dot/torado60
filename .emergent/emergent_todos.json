@@ -1,0 +1,34 @@
+[
+  {
+    "content": "Copy torado60 repo into /app (preserve protected .env files + platform .git)",
+    "status": "completed"
+  },
+  {
+    "content": "Install backend (pip) and frontend (yarn) dependencies",
+    "status": "completed"
+  },
+  {
+    "content": "Restart services and verify backend/frontend boot cleanly",
+    "status": "completed"
+  },
+  {
+    "content": "Run bash scripts/seed_reset.sh (full DB seed, 20 steps)",
+    "status": "completed"
+  },
+  {
+    "content": "Run integrity gate: scripts/verify_data_integrity.py (21/21)",
+    "status": "completed"
+  },
+  {
+    "content": "Run scripts/health_check.py (25/25) + intent audits (5portals 25/25, remaining 21/21)",
+    "status": "completed"
+  },
+  {
+    "content": "Run bash scripts/audit_all.sh (FE compile + parity + IA) + pytest",
+    "status": "completed"
+  },
+  {
+    "content": "Verify app renders with real data (screenshot login + a portal)",
+    "status": "completed"
+  }
+]

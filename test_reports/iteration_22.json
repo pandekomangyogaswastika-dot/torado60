@@ -1,0 +1,49 @@
+{
+  "summary": "Phase-3 frontend regression for the 5 FINANCE list pages migrated to the shared DataTable primitive (PaymentRequests, PaymentRuns, Payments, APAging, Journals). Logged in as admin@torado.id, walked each route, and exercised: page render, sortable column toggling (asc/desc), row expand → drill-down panel, drill-down testid presence with REAL non-empty data, and detail-action navigation buttons. No PAGEERRORs and no blank screens were captured. AP Aging and Journals fully validated with real drill-down data; the other three currently have zero rows in the live database so only their render + empty-state were validated (the spec explicitly accepts empty-state as long as it doesn't crash).",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "PaymentList (/finance/payments)",
+        "issue": "Empty-state title is wrong copy: shows 'Belum ada Payment Request' but this is the Payments page, not Payment Requests. Sub-line correctly says 'Klik New Payment untuk bayar vendor/pegawai/lainnya.' Title should read 'Belum ada Payment' (or 'Belum ada pembayaran').",
+        "selector": "[data-testid='pay-empty-state']",
+        "priority": "MINOR"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "verification_per_feature": {
+    "Login": "PASS — admin@torado.id / Torado@2026 → /portal-select.",
+    "FIN_PaymentRequests": "RENDER-OK / EMPTY-DATA — /finance/payment-requests renders [data-testid=payment-request-list-page] and [pr-table-card]. KPI cards + filter card render. GET /api/finance/payment-requests returns data:[] (total:0) → DataTable hits its empty branch and renders the EmptyState ('Belum ada Payment Request'). No crash. Could not exercise sort header / row expand / pr-breakdown / pr-detail because DataTable does NOT render the <thead> when rows.length===0 (by design: `if (!sorted.length) return empty;`). Code-inspection of PrBreakdown shows the drill-down testids pr-breakdown-<docno> / pr-breakdown-empty-<docno> and the pr-detail-<docno> action button are wired correctly; cannot be live-verified until data exists.",
+    "FIN_PaymentRuns": "RENDER-OK / EMPTY-DATA — /finance/payment-runs renders [payment-run-list-page] + prn-kpi-strip + prn-toolbar + prn-status-tabs. GET /api/finance/payment-runs returns data:[] → renders EmptyState 'Belum ada Payment Run'. No crash. Drill-down (RunPaymentsDrilldown lazy fetch + prn-breakdown-<docno>) and prn-view-<docno> action wired in code but cannot be live-verified without data.",
+    "FIN_Payments": "RENDER-OK / EMPTY-DATA — /finance/payments renders [payment-list-page] with 8 status tabs ([pay-tab-all]…[pay-tab-cancelled]). KPI strip shows Draft/Awaiting/Approved/Paid all = 0. GET /api/finance/payments returns data:[] → renders EmptyState. No crash. Minor copy bug: EmptyState title says 'Belum ada Payment Request' instead of 'Belum ada Payment'. Tab switching does not throw. Sort / pay-breakdown / pay-view could not be live-exercised due to empty data.",
+    "FIN_APAging": "FULL PASS — /finance/ap-aging renders [ap-aging-page], [ap-asof] date control, [ap-table-card]. 6 vendor rows present (vendor_id keyField). Clicked [ap-vendor-row-sort-total] twice → header arrow toggled asc → desc → cleared (DataTable cycle). Footer row [ap-total-row] and [ap-grand-total] present with value 'Rp 77.215.800'. Expanded first vendor row → [ap-detail-<vendor_id>] revealed with 10 [ap-item-*] rows containing real columns (Doc No / Invoice / Receive / Due / Overdue / Amount). Collapse round-trip OK.",
+    "FIN_Journals": "FULL PASS — /finance/journals renders [journal-list-page], [je-filter-card], [je-list-card] with 20 rows (per_page). [je-sort-total_dr] toggles sort asc/desc. [je-pagination] footer present. Expanded first journal row → lazy fetch resolved in <2s → [je-lines-<id>] rendered 'Baris Jurnal (2)' with 2 lines (Beban Piutang Tak Tertagih / Piutang Usaha), Debit Rp 750.000 / Kredit Rp 750.000, and a balanced Total row Rp 750.000 = Rp 750.000. [je-view-<id>] detail link present.",
+    "GENERAL_NoCrashOrBlank": "PASS — 0 pageerror events captured across 5 finance routes; every route renders body content (KPI cards, filter card, sidebar, etc.) even when the table is empty."
+  },
+  "test_report_links": [],
+  "action_items": [
+    "(Copy) Fix PaymentList.jsx line 127 — EmptyState title 'Belum ada Payment Request' should be 'Belum ada Payment' (or similar) since this is the Payments list, not Payment Requests.",
+    "(Optional / Seed) Live database has 0 Payment Requests, 0 Payment Runs, 0 Payments. Drill-downs for these 3 lists were not exercised against live data; if main agent wants iron-clad validation of pr-breakdown / prn-breakdown (lazy fetch) / pay-breakdown + WHT-breakdown / pr-detail / prn-view / pay-view, seed at least 2-3 records per collection (e.g. extend seed_missing_demo to also create payment_requests + payments + payment_runs, since today it only seeds purchase_requests which is a different collection).",
+    "(Optional / UX) Consider whether DataTable should still render the column header/sort row when rows are empty — currently `if (!sorted.length) return empty;` short-circuits the whole table including <thead>, which is why no sort testids are reachable on empty lists. Today's behavior is consistent (the empty-state replaces the table entirely), but if QA needs to assert that sort columns exist even on empty data, the empty branch could be rendered as a tbody fallback below the headers instead."
+  ],
+  "critical_code_review_comments": [
+    "DataTable primitive is well-built and consistent across all 5 migrations: same keyField wiring, same sortable/numeric/primary column flags, same renderExpanded hook. Sort cycling (asc → desc → cleared) verified on AP Aging and Journals; chevron rotation + ArrowUp/ArrowDown swap visually confirmed.",
+    "Lazy-fetch drill-down pattern is solid for JournalLinesDrilldown (verified live: GET /api/finance/journals/{id} returns lines[] within ~1-2s and renders balanced Dr=Cr table). RunPaymentsDrilldown follows the same shape but could not be live-verified due to empty data.",
+    "APAging footer composition via the DataTable `footer` prop works correctly — the totals row is keyboard-/screen-reader-reachable and the grand total reflects the sum of all vendor totals.",
+    "PaymentList copy bug noted above. All other empty-state titles are correct.",
+    "Minor: DataTable on empty data short-circuits the entire <thead>. Acceptable, but worth flagging if future tests assert on sort testids regardless of data state."
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "n/a (frontend-only)",
+    "frontend": "5/5 list pages render without crash. 2/5 (AP Aging, Journals) fully validated with REAL non-empty drill-down data + sort cycling + detail action. 3/5 (Payment Requests, Payment Runs, Payments) validated only at render+empty-state level because backend currently returns 0 records — drill-down code is wired correctly per code review but not exercised live."
+  },
+  "test_credentials": "admin@torado.id / Torado@2026 (SUPER_ADMIN); token persists at localStorage.aurora_access_token.",
+  "seed_data_creation": "Ran `python3 -m seed.seed_missing_demo` to try to populate finance data — it seeded purchase_requests (different collection) but did NOT add payment_requests / payment_runs / payments rows. Live counts after seed still 0/0/0 for those three.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Phase-3 DataTable migration is regression-clean on the two finance pages that currently have data (AP Aging, Journals). The other three (PR, PRN, Payments) live on backend collections that are currently empty — the pages correctly render the empty state. To fully exercise their drill-downs in future iterations, seed sample payment_requests / payment_runs / payments rows first (seed_missing_demo seeds purchase_requests, NOT payment_requests). Key testids confirmed reachable: ap-vendor-row-sort-total, ap-total-row, ap-grand-total, ap-detail-{vid}, ap-item-{gr_id}; je-sort-{key}, je-{id}, je-lines-{id}, je-view-{id}, je-pagination. Wired-but-unreached: pr-row-sort-*, pr-breakdown-{docno}, pr-detail-{docno}, prn-row-sort-*, prn-breakdown-{docno}, prn-view-{docno}, pay-row-sort-*, pay-breakdown-{docno}, pay-view-{docno}. DataTable empty-data behavior: when rows.length===0 the entire <table> (including <thead>) is replaced by the empty prop — sort testids will not be in the DOM in that case.",
+  "rca of the issue": "No bugs caused by the migration. The only real issue found is a copy mistake on /finance/payments empty-state title ('Belum ada Payment Request' should be 'Belum ada Payment'). The reason 3/5 drill-downs could not be live-validated is purely seed-data absence — backend GETs return data:[] for payment-requests, payment-runs, and payments — not a defect in the DataTable migration itself."
+}

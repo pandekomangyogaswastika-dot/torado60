@@ -1,0 +1,34 @@
+{
+  "summary": "Phase 3 Admin DataTable migration UI test (9 list pages). 8 of 9 pages render without crash and DataTable works correctly. Login OK. UsersAdmin drill-down + sortable headers (4 keys) + search + edit dialog all working. MasterData (items/vendors/employees/coa/brands/outlets) renders rows + drill-down. Loyalty Redemptions empty state correct. Loyalty Customers, Audit Log (50 rows, 3 sortable cols), Operations Logs/Scheduler/Archival render fine. CRITICAL BLOCKER: /admin/tour-analytics crashes with ReferenceError: Table is not defined — same half-migration pattern (imports DataTable but JSX body still uses unimported shadcn <Table>/<TableHeader>/<TableRow>/<TableHead>/<TableBody>/<TableCell>) that previously affected UsersAdmin / MasterData / LoyaltyAdminRedemptions.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "TourAnalytics (/admin/tour-analytics)",
+        "issue": "Page crashes — ErrorBoundary catches `ReferenceError: Table is not defined` (ERR-34QYGH). File /app/frontend/src/portals/admin/TourAnalytics/index.jsx imports DataTable at line 36 but still uses <Table>, <TableHeader>, <TableRow>, <TableHead>, <TableBody>, <TableCell> from line 234+ without importing them. This is exactly the same half-migration bug pattern that previously affected UsersAdmin/MasterData/LoyaltyAdminRedemptions (LoadingState/Skeleton). Migration was left incomplete for this file.",
+        "selector": "data-testid=admin-portal route /admin/tour-analytics",
+        "priority": "CRITICAL"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/test_reports/admin_datatable_final.png", "/app/test_reports/tour_crash.png", "/app/test_reports/customers_state.png"],
+  "action_items": [
+    "Finish TourAnalytics DataTable migration: replace the shadcn <Table>/<TableHeader>/<TableRow>/<TableHead>/<TableBody>/<TableCell> block (around line 234+ in /app/frontend/src/portals/admin/TourAnalytics/index.jsx) with a <DataTable> using the columns spec (Tour/Starts/Completes/Skips/Closes/Completion%/Skip%/Users/Avg.Durasi), with sortable headers, renderExpanded drill-down, rowTestIdPrefix, and empty-state. Alternatively, just import the shadcn Table primitives — but per the migration goal you should use DataTable.",
+    "Verify retest after fix that /admin/tour-analytics renders DataTable rows (or empty state) and exposes data-testid prefixed rows."
+  ],
+  "critical_code_review_comments": [
+    "Half-migration pattern recurs: when swapping the import to DataTable, ALWAYS replace the JSX body in the same commit. Consider adding an ESLint rule or a grep-based pre-commit hook to catch references to unimported <Table>/<TableRow>/etc.",
+    "DataTable.jsx: `next.has(id) ? next.delete(id) : next.add(id)` (line ~190) uses ternary for side-effects — works but is a lint smell (no-unused-expressions). Consider an if/else.",
+    "MasterData/Outlets and MasterData/COA returned 0 rows — likely empty in demo DB. Confirm seed scripts cover these to make manual QA easier."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (frontend-only run)", "frontend": "89% (8/9 admin DataTable pages OK; TourAnalytics crashes)"},
+  "test_credentials": "admin@torado.id / Torado@2026 (SUPER_ADMIN) — used successfully",
+  "seed_data_creation": "none",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "After main agent fixes TourAnalytics, just re-run a quick playwright visit to /admin/tour-analytics with admin@torado.id and confirm no ErrorBoundary (look for absence of text 'Ups, ada yang tidak beres' and presence of data-testid prefixed rows or an empty-state element). All other 8 admin pages already validated: UsersAdmin sort testids are user-row-sort-full_name/email/status/last_login_at (NOT 'name'). MasterData sort/drilldown works on items. Redemptions empty-state testid is 'redemptions-empty'. Audit log shows 50 rows + 3 sortable headers. Operations logs/scheduler/archival render fine.",
+  "rca of the issue": "TourAnalytics/index.jsx was migrated to import DataTable from @/components/shared/DataTable (line 36) but the JSX body (lines 234–255+) was NOT rewritten — it still references <Table>, <TableHeader>, <TableRow>, <TableHead>, <TableBody>, <TableCell> which were never imported, producing a runtime ReferenceError when React renders the component. ErrorBoundary catches it and shows ERR-34QYGH. Repro: login as admin, navigate /admin/tour-analytics. Mitigation: complete the DataTable migration in TourAnalytics/index.jsx (replace the entire <Table>…</Table> block with a <DataTable columns=[…] rows=… renderExpanded=… rowTestIdPrefix='tour-row' empty=… /> as done in MasterData.jsx)."
+}

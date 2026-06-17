@@ -1,0 +1,45 @@
+{
+  "summary": "Phase-3 DataTable migration regression for the 7 HR list pages (advances, foc, voucher, service-charge, incentive, lb-fund, job-applications). Logged in as admin@torado.id, walked every route, asserted page render, created live data via the existing dialogs where required, and verified sortable headers, click-to-expand drill-down, row-action buttons. All 7 pages render without crash, blank screen, or React error boundary. ZERO console errors and ZERO 'validateDOMNesting' / nested-<button> warnings across the entire batch.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "verification_per_feature": {
+    "Login": "PASS — admin@torado.id / Torado@2026 → /portal-select (POST /api/auth/login 200).",
+    "Page_Render_All_7": "PASS — [hr-advances-page], [hr-foc-page], [hr-voucher-page], [hr-service-charge-page], [hr-incentive-page], [hr-lb-fund-page], [job-applications-page] ALL mount with no pageerror, no blank screen, no React error boundary.",
+    "Advances": "FULL PASS — Click [hr-adv-create] → [hr-adv-form-dialog] opens. Employee select [hr-adv-employee] populated with 25 options. Filled principal=2000000, tenor=4, submitted. POST /api/hr/advances → 200. Toast 'Kasbon dibuat (status: draft)' shown. New row appears in DataTable ([hr-adv-expand-<id>] count went 0→1). Clicking the expand toggle opens the drill-down: [hr-adv-expanded-<id>] AND [hr-adv-schedule-<id>] both rendered ('Schedule Cicilan (4)' with the 4 monthly cards). Both sort headers verified: [hr-adv-sort-principal] toggles asc/desc, [hr-adv-sort-advance_date] toggles asc/desc — no errors.",
+    "FOC": "FULL PASS — [hr-foc-create] → [hr-foc-form-dialog] opens. Outlet [hr-foc-outlet] picked first option, amount=50000, submit. 7 rows rendered in DataTable after create. Sort header [hr-foc-row-sort-amount] toggles asc/desc cleanly.",
+    "Voucher": "FULL PASS — [hr-voucher-issue-btn] → [hr-voucher-issue-dialog]. qty=5, value=50000, submit. 17 voucher rows rendered, 10 [hr-voucher-redeem-<code>] row-action buttons present. Sort header [hr-voucher-row-sort-value] toggles OK.",
+    "Incentive": "FULL PASS — Switched to Schemes tab via [hr-inc-tab-schemes]. [hr-inc-scheme-create] → [hr-inc-scheme-dialog]. Filled code=PCT1, name='1% Sales', pct=0.01 (rule_type=pct_of_sales default). POST /api/hr/incentive-schemes → 200. Toast 'Scheme dibuat'. Schemes DataTable now shows 1 row (PCT1 / 1% Sales / global / pct_of_sales / 0 employees / Aktif). Sortable header [hr-inc-scheme-sort-code] present and clickable. Runs tab ([hr-inc-tab-runs]) renders [hr-inc-runs-card] with empty state (no runs in DB) — acceptable per spec.",
+    "ServiceCharge": "PASS (empty-state acceptable) — [hr-service-charge-page] + [hr-sc-table-card] mount cleanly. Empty state shown because no validated daily-sales exist (acceptable per spec).",
+    "LBFund": "PASS (empty-state acceptable) — [hr-lb-fund-page] mounts. KPI strip [lb-fund-kpi-strip] with [lb-fund-kpi-balance], [lb-fund-kpi-in], [lb-fund-kpi-out] rendered. Table card [lb-fund-table-card] rendered with empty state. NOTE: rowTestIdPrefix is 'lb-fund-row' so actual sortable headers are testid `lb-fund-row-sort-<key>` (the spec wrote `lb-fund-sort-*` — minor naming-spec mismatch, NOT a defect). Headers only render when rows exist.",
+    "JobApplications": "PASS (empty-state acceptable) — [job-applications-page] + [job-applications-table-card] mount, 0 rows because /careers public form has no submissions in DB. Empty state shown. No crash.",
+    "ConsoleHygiene_REGRESSION_CHECK": "PASS — Across all 7 HR routes, ZERO non-429 console errors and ZERO 'validateDOMNesting' / 'cannot contain a nested <button>' warnings. The previously-fixed DataTable header nested-button bug remains fixed for the HR batch. (429s observed are upstream API rate-limit responses from /api/* during rapid navigation — not a Phase-3 defect.)"
+  },
+  "test_report_links": [],
+  "action_items": [
+    "(Optional / seed) Service Charge, LB Fund, Job Applications were validated only at render + empty-state level because their data sources are empty in the current DB. To live-exercise [hr-sc-detail-dialog], [lb-fund-row-sort-*], [app-row-<id>] click-to-detail + [app-view-<id>] Eye action, seed (a) a validated daily-sales batch + run service-charge calc, (b) a couple of LB Fund ledger entries (incentive postings already create some), (c) a /careers application submission. Code paths are wired correctly by inspection.",
+    "(Naming, minor) Spec referenced sort testid `lb-fund-sort-*`; actual is `lb-fund-row-sort-*` because LBFundLedger sets rowTestIdPrefix='lb-fund-row'. Either update the spec, or normalize the prefix to 'lb-fund' for consistency with hr-adv / hr-foc-row / hr-voucher-row / hr-sc-row / hr-inc-scheme. Not a functional defect.",
+    "(Observation, low priority) Single click on [hr-adv-submit] emitted 4 'Kasbon dibuat' toast notifications, but the network panel shows exactly ONE POST /api/hr/advances → 200 and only ONE new row was created. Most likely a React-StrictMode double-render or a stale-toast accumulation from previous test runs. Worth checking if toast.success is called inside a useEffect that re-fires."
+  ],
+  "critical_code_review_comments": [
+    "DataTable migration across all 7 HR list pages is clean and consistent: keyField wiring, sortable+sortAccessor, defaultSort, renderExpanded, rowAction (with stopPropagation) — all behaving as designed.",
+    "Drill-down pattern verified live for Advances: clicking [hr-adv-expand-<id>] toggles [hr-adv-expanded-<id>] with [hr-adv-schedule-<id>] inside rendering the 4-cicilan grid (real persisted data).",
+    "Previously-fixed nested-<button> bug (iteration_23 / StockBalance) has NOT regressed into the HR batch. None of the HR DataTable consumers embed an interactive element inside a sortable header label.",
+    "rowTestIdPrefix naming is inconsistent across the codebase: hr-adv (no -row suffix), hr-foc-row, hr-voucher-row, hr-sc-row, hr-inc-scheme, hr-inc-run-row, lb-fund-row. Recommend a single convention to make automated regression less brittle.",
+    "Empty-state UX is correct on ServiceCharge, LBFund, JobApplications — no crash, clear copy."
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "n/a (frontend-only per request)",
+    "frontend": "7/7 pages render without crash. 4/7 fully live-validated end-to-end (Advances, FOC, Voucher, Incentive incl. drill-down/sort/row-action). 3/7 (ServiceCharge, LBFund, JobApplications) validated at render + empty-state level only because their data sources are empty in the current DB."
+  },
+  "test_credentials": "admin@torado.id / Torado@2026 (SUPER_ADMIN); token persists at localStorage.aurora_access_token.",
+  "seed_data_creation": "Created during this run: 1 kasbon (POST /api/hr/advances, 4-month tenor, principal 2,000,000), 1 FOC entry (50,000), 1 voucher batch (5 vouchers @ 50,000), 1 incentive scheme (PCT1 / 1% Sales / pct_of_sales / 0.01). All persisted via 200 responses.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Phase-3 DataTable migration regression for HR portal (7 list pages) is CLEAN — no crashes, no nested-button warnings, all create/sort/expand/row-action flows live-verified where data could be created. Persistent seeded data after this run: PCT1 incentive scheme, 1 advances row, 1 FOC, 1 voucher batch. To live-exercise the remaining 3 empty-state pages, seed validated daily-sales (for service-charge calc), LB-fund ledger entries, and /careers form submissions. Naming nit: LBFund uses rowTestIdPrefix='lb-fund-row' (spec said 'lb-fund-sort-*'). Investigate the duplicate-toast observation on hr-adv-submit (4 toasts per 1 POST) before declaring the toast layer fully clean.",
+  "rca of the issue": "No defects found in this iteration. The previously-reported nested-button bug (StockBalance / iteration_23) was scoped to inventory and does NOT recur in any of the 7 HR pages because none of the HR DataTable consumers embed an interactive <button> (e.g. InlineHelp) inside a sortable column label."
+}

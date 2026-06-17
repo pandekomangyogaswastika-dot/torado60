@@ -1,0 +1,45 @@
+{
+  "summary": "Frontend-only verification of UI/UX overhaul (Profit Walk rebuild, Daily Sales consolidation, sidebar cleanup, migrated charts, tab title, 1366 overlap). Logged in once as admin@torado.id. All Profit Walk usability primitives PASS (KPI cards w/ delta chips, WaterfallChart with 9 floating bars + glass tooltip, expandable DataTable with per-account breakdown for Revenue, sortable headers re-order rows, period/compare/refresh controls reload without error). Outlet portal consolidation PASS (sales-wizard route redirects to /outlet/daily-sales/new, daily-sales-list-page testid present, no Sales Wizard sidebar nav item — only sidebar-nav-item-daily-sales/daily-orders). Sidebar has NO 'RECENT'/'PINNED' sections (verified across executive+outlet portals). All 5 migrated charts (cash-position, period-compare, outlet-budget-monitor, crm-analytics, cms-analytics) render without crash; cash-projection-chart testid found. ONE BUG FOUND AND FIXED by me: <title> in /app/frontend/public/index.html was still 'Emergent | Fullstack App' — replaced with 'Torado Group — ERP'; verified live page now reads 'Torado Group — ERP'. ONE REMAINING BUG: at 1366px viewport the TopNav portal switcher 'Owner' button is partially obscured behind the 'Torado' logo (only trailing 'er' visible) — overlap was supposedly fixed earlier but is NOT fixed on /executive route.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "TopNav (1366px)", "issue": "At viewport width 1366, the leftmost portal-switcher button 'Owner' is rendered behind/overlapped by the 'Torado' logo. Screenshot shows only trailing 'er' of 'Owner' peeking out next to logo. Spec explicitly required no overlap at 1366px.", "selector": "header (Torado logo + portal switcher buttons)", "priority": "MEDIUM"}
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "verification_per_feature": {
+    "TAB_TITLE": "FIXED BY TESTING AGENT — /app/frontend/public/index.html line 24 had '<title>Emergent | Fullstack App</title>'. Replaced with 'Torado Group — ERP'. Verified live page.title() now returns 'Torado Group — ERP' on /login and /executive.",
+    "PROFIT_WALK_PAGE": "PASS — [data-testid=profit-walk-page] present. Period 2026-06 vs 2026-05 (LMTD-14d).",
+    "PROFIT_KPI_CARDS": "PASS — Revenue Rp 625.371.000 (-16.7%), Gross Profit Rp 406.493.000 (-16.7%, 65% margin), Net Profit Rp 335.593.000 (-31.3%, 53.7% margin), Δ Net vs Compare -31.3% (Compare: Rp 488.180.000). All 4 cards render with delta chips inside [data-testid=profit-kpi-cards].",
+    "WATERFALL_CHART": "PASS — [data-testid=waterfall-chart] present. 9 bars (waterfall-bar-0..8) for Revenue→COGS→Other Income→Gross Profit→OPEX→Service Charge→Bonus/Incentive→Tax→Net Profit. Floating bars + value labels render. Hover over bar 0 shows [data-testid=waterfall-tooltip] with content: 'Revenue · Period Rp 625.371.000 · Compare Rp 751.044.000 · Running Rp 625.371.000 · -16.7% vs compare'.",
+    "STAGE_EXPAND_REVENUE": "PASS — Clicked [data-testid=stage-Revenue] → [data-testid=stage-expanded-Revenue] + [data-testid=breakdown-Revenue] appeared with 3 account rows: 'Revenue - Food' Rp 343.956.000, 'Revenue - Beverage' Rp 187.610.000, 'Revenue - Other' Rp 93.805.000 + Δ% columns. Click again collapses (stage-expanded-Revenue removed).",
+    "STAGE_SORT": "PASS — [data-testid=stage-sort-delta] and [data-testid=stage-sort-value] both present. Clicking stage-sort-delta re-orders rows; verified row testid order changed from ['Revenue','COGS','Other Income','Gross Profit','OPEX','Service Charge','Bonus/Incentive','Tax','Net Profit'] to ['Net Profit','Revenue','Gross Profit','OPEX','Other Income','Service Charge','Bonus/Incentive','Tax','COGS'].",
+    "PROFIT_PERIOD_CONTROLS": "PASS — [data-testid=profit-period-select], [data-testid=profit-compare-select], [data-testid=profit-refresh] all present. Refresh button click reloads data without crash (profit-walk-page still rendered after click).",
+    "DAILY_SALES_CONSOLIDATION": "PASS — /outlet/daily-sales loads with [data-testid=daily-sales-list-page] and sidebar [data-testid=sidebar-nav-item-daily-sales], [data-testid=sidebar-nav-item-daily-orders]. NO 'Sales Wizard' menu present in outlet sidebar (no testid containing 'sales-wizard'). Direct nav to /outlet/sales-wizard correctly REDIRECTS to /outlet/daily-sales/new (verified page.url after navigation).",
+    "MIGRATED_CHARTS": "PASS — /finance/cash-position renders + has [data-testid=cash-projection-chart] (47 SVGs, no crash). /executive/period-compare renders (46 SVGs, no crash). /executive/outlet-budget-monitor renders (31 SVGs, no crash, body_len lower but no error). /admin/loyalty/crm-analytics renders (38 SVGs, no crash). /admin/cms/cms-analytics renders (38 SVGs, no crash). No 'Something went wrong' / Error Boundary banners on any page. (Some 429s from /api/auth/me during heavy multi-page nav, expected, NOT a chart bug.)",
+    "SIDEBAR_RECENT_PINNED": "PASS — Searched sidebar text on both /executive/* and /outlet/* — no 'RECENT' or 'PINNED' substring found.",
+    "TOPNAV_1366_OVERLAP": "FAIL — At 1366x768 on /executive, the first portal-switcher button 'Owner' is partially hidden behind the 'Torado' logo (logo bbox right=126, only 'er' of 'Owner' is visible immediately after). Sidebar dropdown is positioned at x=12,y=330 (not overlapping logo), but the TopNav portal buttons start before the logo's right edge."
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Fix TopNav at 1366px width: shift the portal-switcher buttons start position so they do not overlap the 'Torado' logo (logo right edge ~126px, first portal button 'Owner' should start at >=140px). The earlier 'responsive at 1366px' fix appears regressed.",
+    "(Already fixed by testing agent) tab <title> in /app/frontend/public/index.html — main agent should retain 'Torado Group — ERP' going forward and consider also setting it dynamically per page if needed."
+  ],
+  "critical_code_review_comments": [
+    "ProfitWalk.jsx is a clean showcase of the shared DataTable+WaterfallChart+KpiCard primitives — sortable + expandable rows work end-to-end with backend breakdown data (verified 3 Revenue accounts).",
+    "Outlet portal navigation cleanly redirects legacy /outlet/sales-wizard → /outlet/daily-sales/new; the React Router Navigate replace is functional.",
+    "Tab <title> regression: the static index.html still pointed at the Emergent boilerplate title. Main agent should add this to the project's launch checklist.",
+    "Migrated chart pages do not crash even with empty/sparse seed data — empty-state messaging path is exercised (period-compare especially, where body_len was small)."
+  ],
+  "updated_files": [
+    "/app/frontend/public/index.html (changed <title> from 'Emergent | Fullstack App' to 'Torado Group — ERP')"
+  ],
+  "success_rate": { "backend": "n/a (frontend-only)", "frontend": "10/11 features PASS (Profit Walk all 6 subcases, Daily Sales consolidation, sidebar cleanup, migrated charts, tab title — title fixed by me). 1 fail: 1366px TopNav overlap with Torado logo." },
+  "test_credentials": "admin@torado.id / Torado@2026 — token persisted as localStorage.aurora_access_token. Worked first try.",
+  "seed_data_creation": "None — read-only verification.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Browser sessions across mcp_browser_automation calls are NOT shared (new context each invocation) — must login inside the SAME script that runs the test. Login is rate-limited (~10/60s) and so are general /api/* endpoints (~200/60s) — observed 429 cascades when hopping >5 pages in <30s; pace navigation. Profit Walk testids: profit-walk-page, profit-kpi-cards, waterfall-chart, waterfall-bar-{0..8}, waterfall-tooltip, stage-{label}, stage-expanded-{label}, breakdown-{label}, stage-sort-{value|delta|compare|delta_pct}, profit-period-select, profit-compare-select, profit-refresh. Outlet daily-sales list testid is daily-sales-list-page. Tab title fix applied to /app/frontend/public/index.html (frontend was restarted). Remaining open bug: 1366px TopNav overlapping Torado logo on /executive — measured logo right=126px, but 'Owner' portal button visible starting from before that position. Reproduce with viewport 1366x768 on /executive after login.",
+  "rca of the issue": "Tab title bug — /app/frontend/public/index.html line 24 was still the CRA boilerplate '<title>Emergent | Fullstack App</title>'. No dynamic <title> override in the React app (no react-helmet usage observed for the root document.title). Fix: hardcode 'Torado Group — ERP' in the static template. 1366px overlap — the TopNav portal-switcher items appear to be rendered in a horizontal row with insufficient padding-left to clear the absolutely-positioned/fixed 'Torado' logo container at narrower widths; layout works at 1440px but regresses ~74px earlier. Likely culprit: header flex container's gap/justify-between assumes >= 1440px or the logo column has no min-width reservation."
+}

@@ -1,0 +1,68 @@
+{
+  "summary": "Completed comprehensive testing of Smart SEO feature including Bulk Optimize and Single Page SEO workflows. AI integration is active and working correctly. Single page SEO workflow (Analyze → Generate → Save) is fully functional. Bulk Optimize has a UI bug where dialog overlay doesn't fully close.",
+  "backend_issues": {
+    "critical_bugs": [],
+    "flaky_endpoints": [],
+    "notes": "Backend APIs are working correctly. AI endpoints (/api/seo/ai/analyze and /api/seo/ai/generate) are functional with proper timeout handling (35s backend, 45s frontend axios)."
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "BulkOptimizeDialog",
+        "issue": "Dialog overlay doesn't fully close after bulk optimization completes, blocking subsequent page interactions",
+        "selector": "[data-testid='bulk-optimize-dialog']",
+        "fix_priority": "HIGH",
+        "details": "After clicking 'Hentikan' or completing bulk optimization, the dialog overlay (bg-black/80) remains visible and intercepts pointer events, preventing clicks on page list buttons. User must reload page to continue."
+      },
+      {
+        "component": "BulkOptimizeDialog",
+        "issue": "Timeout value (30s) is too short for AI operations",
+        "selector": "PER_CALL_TIMEOUT_MS in BulkOptimizeDialog.jsx",
+        "fix_priority": "MEDIUM",
+        "details": "AI operations take 17-26 seconds + network overhead. Current 30s timeout causes some pages to fail. Should be increased to 45s to match frontend axios timeout."
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "passed_tests": [
+    "Login with admin@torado.id / Torado@2026",
+    "Navigate to Smart SEO page (/admin/smart-seo)",
+    "Sidebar displays 14 public pages (Home, Brands, Altero, De La Sol, Calluna, Rucker Park, Bakkies, Menu, Locations, About, News & Events, Careers, Contact, Reservasi)",
+    "Page selection and switching between pages",
+    "Bulk Optimize button visible and clickable",
+    "Bulk Optimize Dialog opens with all UI elements",
+    "Filter options visible (Semua/Kosong/Belum AI)",
+    "Mode options visible (Fast/Full)",
+    "Global seed keyword input functional",
+    "Bulk optimization starts and processes pages",
+    "Progress indicators show page-by-page status",
+    "Cancel/Stop button visible during bulk optimization",
+    "At least 1 page completed successfully with AI-powered status",
+    "Single Page SEO: Home page selection",
+    "Single Page SEO: Keyword input ('restoran bandung premium, cafe bandung')",
+    "Single Page SEO: Analyze button triggers AI processing",
+    "AI Processing Banner displays with elapsed timer (showed 42s)",
+    "Analysis results display after completion with keyword clusters, intent badges, quick wins, and AI suggestions",
+    "Single Page SEO: Generate button triggers AI content generation",
+    "Title field auto-filled (57 chars): 'Torado Group Bandung - Premium Multi-Brand F&B Experience'",
+    "Description field auto-filled (159 chars) with relevant content",
+    "OG Title field auto-filled (46 chars)",
+    "Save button successfully saves SEO settings",
+    "Success toast notification displays: 'SEO settings disimpan!'",
+    "Tersimpan badge appears after successful save"
+  ],
+  "test_report_links": [
+    "/root/.emergent/automation_output/20260527_172139/console_20260527_172139.log",
+    "/root/.emergent/automation_output/20260527_172606/console_20260527_172606.log"
+  ],
+  "action_item_for_main_agent": "Fix BulkOptimizeDialog overlay issue: Ensure dialog and overlay fully unmount/close when user clicks 'Hentikan', 'Selesai', or closes the dialog. The overlay (bg-black/80) is remaining visible and blocking pointer events. Also increase PER_CALL_TIMEOUT_MS from 30000 to 45000 to match frontend axios timeout and prevent unnecessary timeouts during AI operations.",
+  "updated_files": [],
+  "success_percentage": {
+    "backend": "100%",
+    "frontend": "95%",
+    "overall": "97%"
+  },
+  "should_call_test_agent_after_fix": "false",
+  "should_main_agent_test_itself": "true"
+}

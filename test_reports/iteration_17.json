@@ -1,0 +1,48 @@
+{
+  "summary": "Frontend-only forensic audit of Torado ERP across 9 portals / 46 routes via Playwright as admin@torado.id. Login + portal selection works. Almost all pages RENDER without white screens or uncaught React errors. Confirmed previously-known data gaps (F3 ap_ledgers drift, D2 empty budgets/fixed-assets) — those pages now show graceful empty states (PASS for UI, WARN for data). One new SYSTEMIC issue surfaced: per-route hit to /auth/me triggers 60s/10-req rate limiter (HTTP 429) when users navigate fast — secondary pages then fall back to empty React shell (body_len ~4469) until 2s+4s retry succeeds. Also confirmed PWA service-worker registration error on every page (text/html MIME). AP-Aging XLSX export and Tax-Settlement Preview UIs were not deeply interacted with (read-mostly audit) but their list pages render fine. Detail pages exercised: Journal Detail, PO Detail loadable from list. No destructive mutations performed.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/auth/me", "issue": "Aggressive rate limit (10/60s/IP) returns 429 during normal multi-page browsing; frontend then displays empty shell until 2s+4s retry. Either raise limit or cache /auth/me client-side per session."},
+      {"endpoint": "/service-worker.js (or PWA manifest fetch)", "issue": "Static SW file served as text/html (likely SPA fallback) → 'unsupported MIME type' SW registration error on every page load"}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "AuthContext / route guards", "issue": "Every route navigation re-fetches /auth/me synchronously. When backend rate-limits (429), entire page renders only the index.html shell (no sidebar, no content) for ~6s. Cache the user session in memory and only revalidate periodically.", "selector": "n/a", "priority": "HIGH"},
+      {"component": "Service Worker registration", "issue": "Console error on EVERY page: 'Service worker registration failed: The script has an unsupported MIME type (text/html)'. SW route falls through to SPA index.html. Either remove SW registration or fix static path.", "selector": "n/a", "priority": "MEDIUM"}
+    ],
+    "integration_issues": [
+      {"flow": "AP-Aging XLSX export", "issue": "List page renders with 7 rows correctly. Per known backend bug F10 (Workbook passed to Response), clicking XLSX button would return HTTP 500 — UI has NO visible error toast wired (uses default fetch + window.open style). Not interacted with in this read-only audit.", "affected_selectors": ["AP Aging export button"]},
+      {"flow": "Tax Settlement Preview (Period Closing Wizard)", "issue": "Period Closing list renders 12 period rows fine. Per known F2/F11, opening tax-settlement preview will always say 'COA accounts tidak lengkap (will_create:false)'. Not opened in this audit but list-level UI is healthy.", "affected_selectors": ["period-closing wizard step Tax Settlement"]}
+    ],
+    "design_issues": [
+      {"screen": "Owner Cockpit, Cash Position, Owner Cash", "issues": ["AP/AR-related Rp figures shown as Rp0 / empty due to backend F3 collection drift (ap_invoices vs ap_ledgers). Pages render with charts and labels but key KPIs are zero/blank. Confirmed visible in UI."]},
+      {"screen": "Balance Sheet", "issues": ["Liabilities side likely Rp0 (per D1: AP subledger Rp93.8M not posted to GL). UI renders 11 rows but balance-sheet equality might not hold — could not deeply verify totals in this audit."]},
+      {"screen": "Fixed Assets / Budget Management / Tax Center", "issues": ["Render correctly with empty-state messaging — graceful (matches D2). No crashes."]}
+    ]
+  },
+  "test_report_links": ["/app/test_reports/_audit_raw.json", "/app/test_reports/_audit_retry.json", "/app/test_reports/_audit_retry2.json"],
+  "action_items": [
+    "Cache /auth/me client-side (zustand/context) instead of re-fetching on every route mount — eliminates 429 cascade and white-shell flicker. (HIGH)",
+    "Fix or remove PWA service-worker registration (currently fails on every page load with MIME type error).",
+    "Confirm AP-Aging XLSX endpoint fix (backend F10) AND wire a user-visible error toast in APAging.jsx for failed export.",
+    "Fix backend collection drift (F3) so Owner Cockpit / Cash Position / Daily Briefing show real AP figures instead of Rp0.",
+    "Fix backend F2/F11 so Period Closing tax-settlement wizard does not always block on 'COA accounts tidak lengkap'.",
+    "Post AP subledger to GL (D1) so Balance Sheet liabilities reflect Rp93.8M and assets = liab+equity."
+  ],
+  "critical_code_review_comments": [
+    "Frontend auth context likely re-validates session on every <Outlet/> mount — should be lifted to a root provider with stale-while-revalidate (e.g. 60s) to avoid /auth/me thrashing.",
+    "APAging.jsx export should handle non-2xx XLSX responses and surface a toast/alert (currently appears to assume success).",
+    "PWA SW registration should be gated by 'if (process.env.NODE_ENV === \\\"production\\\" && swFileExists)' or removed; current code pollutes console on every load.",
+    "Owner/Executive dashboards should display a clear placeholder when AP figures are Rp0 rather than mixing real and zero KPIs without indication."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a (skipped)", "frontend": "~93% (43/46 routes render correctly; 3 categories of data-gap WARN states explained by known backend bugs; 0 white-screens after pacing)"},
+  "test_credentials": "admin@torado.id / Torado@2026 — login OK, token in localStorage['erp_token']",
+  "seed_data_creation": "None — audit was read-mostly per instructions.",
+  "retest_needed": true,
+  "main_agent_can_self_test": false,
+  "context_for_next_testing_agent": "When testing this app via Playwright, MUST add >=5s sleep between navigations to avoid /auth/me 429 rate limit (10/60s/IP) which makes pages render an empty shell (body_len ~4469). Login: admin@torado.id / Torado@2026. Token key: erp_token. Portal selection at /portal-select. Finance routes use /finance/reports?tab=<id> for TB/BS/P&L/CashFlow. Period closing wizard at /finance/period-closing/:period. AP Aging XLSX button known broken (backend 500). Owner cash/cockpit and Cash Position show Rp0 due to backend F3 — UI itself is healthy. Fixed Assets, Budget Mgmt, Tax Center are intentionally empty (D2). All known issues are BACKEND data/business logic — frontend rendering layer is solid.",
+  "rca of the issue": "Empty-shell observations during the first scan were NOT real frontend bugs — they were caused by /auth/me being rate-limited (429) under rapid Playwright navigation. Frontend's AuthContext blocks layout render until /auth/me succeeds (with 2s+4s backoff retry). Mitigation: cache user in memory after login; only revalidate on focus or every 60s. Confirmed by re-running same routes with 7s spacing → all pages render full UI (body_len 5500-20000)."
+}

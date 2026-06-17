@@ -1,0 +1,183 @@
+{
+  "finance.fixed-assets": {
+    "path": "/finance/assets",
+    "body_len": 5471,
+    "rows": 0,
+    "table": false,
+    "chart": false,
+    "rp": false,
+    "empty": true,
+    "shell": false,
+    "rate429": false,
+    "errs": 1,
+    "err_samples": [
+      "error: The script has an unsupported MIME type ('text/html')."
+    ]
+  },
+  "finance.budget-mgmt": {
+    "path": "/finance/budget/manage",
+    "body_len": 5534,
+    "rows": 0,
+    "table": false,
+    "chart": false,
+    "rp": false,
+    "empty": true,
+    "shell": false,
+    "rate429": false,
+    "errs": 3,
+    "err_samples": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "error: Failed to load resource: the server responded with a status of 404 ()"
+    ]
+  },
+  "finance.tax": {
+    "path": "/finance/tax",
+    "body_len": 5842,
+    "rows": 0,
+    "table": false,
+    "chart": false,
+    "rp": false,
+    "empty": true,
+    "shell": false,
+    "rate429": false,
+    "errs": 1,
+    "err_samples": [
+      "error: The script has an unsupported MIME type ('text/html')."
+    ]
+  },
+  "finance.period-closing": {
+    "path": "/finance/period-closing",
+    "body_len": 6572,
+    "rows": 12,
+    "table": true,
+    "chart": false,
+    "rp": false,
+    "empty": false,
+    "shell": false,
+    "rate429": false,
+    "errs": 1,
+    "err_samples": [
+      "error: The script has an unsupported MIME type ('text/html')."
+    ]
+  },
+  "finance.cash-position": {
+    "path": "/finance/cash-position",
+    "body_len": 5919,
+    "rows": 0,
+    "table": false,
+    "chart": true,
+    "rp": true,
+    "empty": true,
+    "shell": false,
+    "rate429": false,
+    "errs": 1,
+    "err_samples": [
+      "error: The script has an unsupported MIME type ('text/html')."
+    ]
+  },
+  "owner.cash": {
+    "path": "/owner/cash",
+    "body_len": 5502,
+    "rows": 0,
+    "table": false,
+    "chart": true,
+    "rp": true,
+    "empty": true,
+    "shell": false,
+    "rate429": false,
+    "errs": 1,
+    "err_samples": [
+      "error: The script has an unsupported MIME type ('text/html')."
+    ]
+  },
+  "owner.cockpit": {
+    "path": "/owner/cockpit",
+    "body_len": 6356,
+    "rows": 0,
+    "table": false,
+    "chart": false,
+    "rp": true,
+    "empty": true,
+    "shell": false,
+    "rate429": false,
+    "errs": 1,
+    "err_samples": [
+      "error: The script has an unsupported MIME type ('text/html')."
+    ]
+  },
+  "owner.briefing": {
+    "path": "/owner/briefing",
+    "body_len": 6078,
+    "rows": 5,
+    "table": true,
+    "chart": false,
+    "rp": true,
+    "empty": false,
+    "shell": false,
+    "rate429": false,
+    "errs": 1,
+    "err_samples": [
+      "error: The script has an unsupported MIME type ('text/html')."
+    ]
+  },
+  "reports.home": {
+    "path": "/reports",
+    "body_len": 5962,
+    "rows": 0,
+    "table": false,
+    "chart": false,
+    "rp": false,
+    "empty": false,
+    "shell": false,
+    "rate429": false,
+    "errs": 1,
+    "err_samples": [
+      "error: The script has an unsupported MIME type ('text/html')."
+    ]
+  },
+  "admin.users": {
+    "path": "/admin/users",
+    "body_len": 6449,
+    "rows": 9,
+    "table": true,
+    "chart": false,
+    "rp": false,
+    "empty": false,
+    "shell": false,
+    "rate429": false,
+    "errs": 1,
+    "err_samples": [
+      "error: The script has an unsupported MIME type ('text/html')."
+    ]
+  },
+  "admin.workflows": {
+    "path": "/admin/workflows",
+    "body_len": 5848,
+    "rows": 0,
+    "table": false,
+    "chart": false,
+    "rp": false,
+    "empty": false,
+    "shell": false,
+    "rate429": false,
+    "errs": 1,
+    "err_samples": [
+      "error: The script has an unsupported MIME type ('text/html')."
+    ]
+  },
+  "admin.settings": {
+    "path": "/admin/settings",
+    "body_len": 6188,
+    "rows": 0,
+    "table": false,
+    "chart": false,
+    "rp": false,
+    "empty": false,
+    "shell": false,
+    "rate429": false,
+    "errs": 1,
+    "err_samples": [
+      "error: The script has an unsupported MIME type ('text/html')."
+    ]
+  }
+}

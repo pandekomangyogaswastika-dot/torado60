@@ -1,0 +1,51 @@
+{
+  "summary": "Frontend-only verification of Phase 3 DataTable migration on 3 Executive portal pages (ExecutiveHome Top Outlets, ReservationSummary Per Outlet, BudgetApprovals). All acceptance criteria pass — no crashes, correct testids, sortable headers, row-click navigation, and proper empty states for budgets/reservations (demo DB has no rows for these).",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Executive Home", "issues": ["Recharts console warnings: 'width(-1) and height(-1) of chart should be greater than 0' from BrandMixDonut / SalesTrendChart container measuring before mount. Cosmetic only — charts render correctly after layout settles. Consider adding minWidth/minHeight to ResponsiveContainer."]}
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "DataTable.jsx is well-structured (~290 lines), uses memo + useMemo, correctly handles sort/expand/row-click states. No code-quality issues.",
+    "ExecutiveHome.jsx (~460 lines) is approaching the 700-line threshold; consider extracting the Top Outlets card and the filter/KPI strips into sub-components for future maintainability.",
+    "Recharts ResponsiveContainer warnings should be silenced by ensuring a minHeight on chart wrappers (non-blocking)."
+  ],
+  "updated_files": [],
+  "success_rate": { "backend": "n/a", "frontend": "100%" },
+  "test_credentials": "admin@torado.id / Torado@2026 (SUPER_ADMIN) — login OK, redirected to /portal-select then Executive routes accessible.",
+  "seed_data_creation": "None. Demo DB had 5 outlets for Top Outlets (Calluna, Altero, ...). Reservations & submitted budgets were empty — empty states verified as expected.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Phase 3 DataTable migration validated for executive batch (ExecutiveHome/ReservationSummary/BudgetApprovals). Remaining executive pages PeriodCompare, OutletBudgetAllocation, OutletBudgetMonitor are intentionally not migrated (matrix/form/heatmap UIs by design). When budgets/reservations seed data exists in future runs, also validate: (a) reject-dialog reason input + confirm-reject-btn submission, (b) approve-btn-{id} happy path, (c) sortable headers `approval-row-sort-*`, (d) inline drill-down `budget-lines-{id}` rendering of COA lines, (e) `reservation-outlet-row-{outlet_id}` rows.",
+  "verified_findings": {
+    "ExecutiveHome /executive/analytics": {
+      "page_renders": true,
+      "top_outlets_rows": 5,
+      "row_testid_pattern": "exec-top-outlet-{outlet_id} verified (e.g. exec-top-outlet-df4ef770-b2ff-48e2-b75e-8a396f8ec074)",
+      "default_sort_revenue_desc": "verified — Calluna Rp 178.250.008 first",
+      "sort_header_outlet_name": "clicking exec-top-outlet-sort-outlet_name re-sorts (Altero became first)",
+      "sort_header_total_pct_present": true,
+      "row_click_navigates": "verified — URL changed to /executive/outlet/90decb6c-00f9-4087-bd9d-1582654b7b0c",
+      "no_crash": true
+    },
+    "ReservationSummary /executive/reservations": {
+      "page_renders": true,
+      "kpi_cards_present": true,
+      "filter_date_from_present": true,
+      "filter_date_to_present": true,
+      "per_outlet_empty_state": "verified — reservation-outlet-empty visible (no demo data)",
+      "no_crash": true
+    },
+    "BudgetApprovals /executive/budget-approvals": {
+      "page_renders": true,
+      "pending_table_empty_state": "verified — budget-approvals-empty 'Tidak ada budget yang menunggu approval' visible",
+      "approved_card_conditional": "not shown (correct — no approved budgets in demo DB)",
+      "no_crash": true
+    }
+  }
+}

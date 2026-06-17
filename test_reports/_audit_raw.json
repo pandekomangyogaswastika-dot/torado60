@@ -1,0 +1,726 @@
+{
+  "login": {
+    "url": "https://anomaly-detection-6.preview.emergentagent.com/portal-select",
+    "token": false
+  },
+  "finance.home": {
+    "path": "/finance",
+    "status": "OK",
+    "body_len": 5994,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": true,
+    "page_errors": [],
+    "console_err_count": 2,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.         Lewati ke konten utamaToradoOwnerExecutiveOutletProcurementInventoryFinanceHRAdminFinanceCari\u2026\u2318K9+9+1SASuper AdminFinance[data-radix-scroll-area-viewport]{s",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/finance"
+  },
+  "finance.journals": {
+    "path": "/finance/journals",
+    "status": "OK",
+    "body_len": 11010,
+    "has_table": true,
+    "rows": 20,
+    "has_Rp": true,
+    "page_errors": [],
+    "console_err_count": 2,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.         Lewati ke konten utamaToradoOwnerExecutiveOutletProcurementInventoryFinanceHRAdminFinanceCari\u2026\u2318K9+9+1SASuper AdminFinance[data-radix-scroll-area-viewport]{s",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/finance/journals"
+  },
+  "finance.trial-balance": {
+    "path": "/finance/reports?tab=trial-balance",
+    "status": "OK",
+    "body_len": 6165,
+    "has_table": true,
+    "rows": 12,
+    "has_Rp": true,
+    "page_errors": [],
+    "console_err_count": 2,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.         Lewati ke konten utamaToradoOwnerExecutiveOutletProcurementInventoryFinanceHRAdminFinanceCari\u2026\u2318K9+9+SASuper AdminFinance[data-radix-scroll-area-viewport]{sc",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/finance/reports?tab=trial-balance"
+  },
+  "finance.balance-sheet": {
+    "path": "/finance/reports?tab=balance-sheet",
+    "status": "OK",
+    "body_len": 5991,
+    "has_table": true,
+    "rows": 11,
+    "has_Rp": true,
+    "page_errors": [],
+    "console_err_count": 2,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.         Lewati ke konten utamaToradoOwnerExecutiveOutletProcurementInventoryFinanceHRAdminFinanceCari\u2026\u2318K9+9+SASuper AdminFinance[data-radix-scroll-area-viewport]{sc",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/finance/reports?tab=balance-sheet"
+  },
+  "finance.profit-loss": {
+    "path": "/finance/reports?tab=profit-loss",
+    "status": "OK",
+    "body_len": 5874,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": true,
+    "page_errors": [],
+    "console_err_count": 2,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.         Lewati ke konten utamaToradoOwnerExecutiveOutletProcurementInventoryFinanceHRAdminFinanceCari\u2026\u2318K9+9+SASuper AdminFinance[data-radix-scroll-area-viewport]{sc",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/finance/reports?tab=profit-loss"
+  },
+  "finance.cashflow": {
+    "path": "/finance/reports?tab=cashflow",
+    "status": "OK",
+    "body_len": 10722,
+    "has_table": true,
+    "rows": 50,
+    "has_Rp": true,
+    "page_errors": [],
+    "console_err_count": 2,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.         Lewati ke konten utamaToradoOwnerExecutiveOutletProcurementInventoryFinanceHRAdminFinanceCari\u2026\u2318K9+9+SASuper AdminFinance[data-radix-scroll-area-viewport]{sc",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/finance/reports?tab=cashflow"
+  },
+  "finance.ap-aging": {
+    "path": "/finance/ap-aging",
+    "status": "OK",
+    "body_len": 5391,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 18,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.         Lewati ke konten utamaToradoOwnerExecutiveOutletProcurementInventoryFinanceHRAdminFinanceCari\u2026\u2318K9+1SASuper AdminFinance[data-radix-scroll-area-viewport]{scr",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/finance/ap-aging"
+  },
+  "finance.ar-invoices": {
+    "path": "/finance/ar-invoices",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/finance/ar-invoices"
+  },
+  "finance.bank-recon": {
+    "path": "/finance/bank-recon",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/finance/bank-recon"
+  },
+  "finance.anomalies": {
+    "path": "/finance/anomalies",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/finance/anomalies"
+  },
+  "finance.payment-requests": {
+    "path": "/finance/payment-requests",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/finance/payment-requests"
+  },
+  "finance.payment-runs": {
+    "path": "/finance/payment-runs",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: Failed to load resource: the server responded with a status of 429 ()",
+      "error: The script has an unsupported MIME type ('text/html')."
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/finance/payment-runs"
+  },
+  "finance.payment-run-templates": {
+    "path": "/finance/payment-run-templates",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/finance/payment-run-templates"
+  },
+  "finance.fixed-assets": {
+    "path": "/finance/assets",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/finance/assets"
+  },
+  "finance.budget-mgmt": {
+    "path": "/finance/budget/manage",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/finance/budget/manage"
+  },
+  "finance.tax": {
+    "path": "/finance/tax",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 8,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/finance/tax"
+  },
+  "finance.period-closing": {
+    "path": "/finance/period-closing",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 12,
+    "console_sample": [
+      "error: Failed to load resource: the server responded with a status of 429 ()",
+      "warning: [Warning] Rate limited (429). Retrying in 4000ms... {attempt: 2, maxAttempts: 3, endpoint: /auth/me}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/finance/period-closing"
+  },
+  "finance.periods": {
+    "path": "/finance/periods",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/finance/periods"
+  },
+  "finance.cash-position": {
+    "path": "/finance/cash-position",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 8,
+    "console_sample": [
+      "error: Failed to load resource: the server responded with a status of 429 ()",
+      "warning: [Warning] Rate limited (429). Retrying in 2000ms... {attempt: 1, maxAttempts: 3, endpoint: /auth/me}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/finance/cash-position"
+  },
+  "proc.pr": {
+    "path": "/procurement/pr",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 12,
+    "console_sample": [
+      "error: Failed to load resource: the server responded with a status of 429 ()",
+      "warning: [Warning] Rate limited (429). Retrying in 4000ms... {attempt: 2, maxAttempts: 3, endpoint: /auth/me}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/procurement/pr"
+  },
+  "proc.po": {
+    "path": "/procurement/po",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/procurement/po"
+  },
+  "proc.gr": {
+    "path": "/procurement/gr",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/procurement/gr"
+  },
+  "proc.rfq": {
+    "path": "/procurement/rfq",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/procurement/rfq"
+  },
+  "proc.vendor-cmp": {
+    "path": "/procurement/vendor-comparison",
+    "status": "OK",
+    "body_len": 5608,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 2,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.         Lewati ke konten utamaToradoOwnerExecutiveOutletProcurementInventoryFinanceHRAdminProcurementCari\u2026\u2318K9+9+1SASuper AdminProcurement[data-radix-scroll-area-vie",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/procurement/vendor-comparison"
+  },
+  "proc.vendor-scorecard": {
+    "path": "/procurement/vendor-scorecard",
+    "status": "OK",
+    "body_len": 5743,
+    "has_table": true,
+    "rows": 6,
+    "has_Rp": true,
+    "page_errors": [],
+    "console_err_count": 2,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.         Lewati ke konten utamaToradoOwnerExecutiveOutletProcurementInventoryFinanceHRAdminProcurementCari\u2026\u2318K9+9+1SASuper AdminProcurement[data-radix-scroll-area-vie",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/procurement/vendor-scorecard"
+  },
+  "inv.balance": {
+    "path": "/inventory/balance",
+    "status": "OK",
+    "body_len": 7560,
+    "has_table": true,
+    "rows": 46,
+    "has_Rp": true,
+    "page_errors": [],
+    "console_err_count": 2,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.         Lewati ke konten utamaToradoOwnerExecutiveOutletProcurementInventoryFinanceHRAdminInventoryCari\u2026\u2318K9+9+1SASuper AdminInventory[data-radix-scroll-area-viewpor",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/inventory/balance"
+  },
+  "inv.movements": {
+    "path": "/inventory/movements",
+    "status": "OK",
+    "body_len": 9385,
+    "has_table": true,
+    "rows": 50,
+    "has_Rp": true,
+    "page_errors": [],
+    "console_err_count": 2,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.         Lewati ke konten utamaToradoOwnerExecutiveOutletProcurementInventoryFinanceHRAdminInventoryCari\u2026\u2318K9+9+1SASuper AdminInventory[data-radix-scroll-area-viewpor",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/inventory/movements-hub?type=history"
+  },
+  "inv.adjustments": {
+    "path": "/inventory/adjustments",
+    "status": "OK",
+    "body_len": 6564,
+    "has_table": true,
+    "rows": 20,
+    "has_Rp": true,
+    "page_errors": [],
+    "console_err_count": 2,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.         Lewati ke konten utamaToradoOwnerExecutiveOutletProcurementInventoryFinanceHRAdminInventoryCari\u2026\u2318K9+9+1SASuper AdminInventory[data-radix-scroll-area-viewpor",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/inventory/adjustments"
+  },
+  "inv.transfers": {
+    "path": "/inventory/transfers",
+    "status": "OK",
+    "body_len": 6287,
+    "has_table": true,
+    "rows": 20,
+    "has_Rp": true,
+    "page_errors": [],
+    "console_err_count": 2,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.         Lewati ke konten utamaToradoOwnerExecutiveOutletProcurementInventoryFinanceHRAdminInventoryCari\u2026\u2318K9+9+1SASuper AdminInventory[data-radix-scroll-area-viewpor",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/inventory/transfers"
+  },
+  "inv.market-list": {
+    "path": "/inventory/market-list",
+    "status": "OK",
+    "body_len": 6090,
+    "has_table": true,
+    "rows": 13,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 14,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.         Lewati ke konten utamaToradoOwnerExecutiveOutletProcurementInventoryFinanceHRAdminInventoryCari\u2026\u2318K9+9+1SASuper AdminInventory[data-radix-scroll-area-viewpor",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/inventory/market-list"
+  },
+  "hr.payroll": {
+    "path": "/hr/payroll",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/hr/payroll"
+  },
+  "hr.leaves": {
+    "path": "/hr/leaves",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/hr/leaves"
+  },
+  "hr.advances": {
+    "path": "/hr/advances",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/hr/advances"
+  },
+  "hr.compensation": {
+    "path": "/hr/compensation",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/hr/compensation"
+  },
+  "exec.home": {
+    "path": "/executive",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/executive"
+  },
+  "exec.analytics": {
+    "path": "/executive/analytics",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/executive/analytics"
+  },
+  "owner.cockpit": {
+    "path": "/owner/cockpit",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/owner/cockpit"
+  },
+  "owner.cash": {
+    "path": "/owner/cash",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/owner/cash"
+  },
+  "owner.briefing": {
+    "path": "/owner/briefing",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/owner/briefing"
+  },
+  "reports.home": {
+    "path": "/reports",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/reports"
+  },
+  "reports.daily-sales": {
+    "path": "/reports/daily-sales",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/reports/daily-sales"
+  },
+  "admin.users": {
+    "path": "/admin/users",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/admin/users"
+  },
+  "admin.roles": {
+    "path": "/admin/roles",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/admin/roles"
+  },
+  "admin.settings": {
+    "path": "/admin/settings",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/admin/settings"
+  },
+  "admin.workflows": {
+    "path": "/admin/workflows",
+    "status": "OK",
+    "body_len": 4469,
+    "has_table": false,
+    "rows": 0,
+    "has_Rp": false,
+    "page_errors": [],
+    "console_err_count": 10,
+    "console_sample": [
+      "error: The script has an unsupported MIME type ('text/html').",
+      "warning: [Warning] Service worker registration failed {error: Failed to register a ServiceWorker for scope ('htt\u2026cript has an unsupported MIME type ('text/html').}"
+    ],
+    "sample": "         You need to enable JavaScript to run this app.                                                                                                                     Made with Emergent                              ",
+    "final_url": "https://anomaly-detection-6.preview.emergentagent.com/admin/workflows"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "summary": "Verified 3 fixes: (1) pytest marks — 0 PytestUnknownMarkWarning, (2) InlineHelp registry — no duplicate keys for opname-variance/transfer-status, ap-aging entry present, (3) Write-off backend 4/4 tests pass + frontend dialog/button working correctly.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_write_off.py",
+    "/app/test_reports/pytest/write_off_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "ap-aging helpId exists in inlineHelpRegistry.js (lines 8-11) but is NOT used in any JSX component — only ap-aging-buckets is used in APAging.jsx line 84. The registry entry is harmless but the test requirement 'hover ap-aging tooltip on /finance/ar-invoices' is ambiguous — the actual AP Aging page uses ap-aging-buckets id, which IS in registry and works correctly."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_write_off.py"
+  ],
+  "success_rate": {
+    "backend": "100% (4/4 write-off tests pass + 0 PytestUnknownMarkWarning)",
+    "frontend": "100% (write-off dialog, buttons, disabled state all working)"
+  },
+  "test_results_detail": {
+    "pytest_marks": "PASS — grep returns 0 PytestUnknownMarkWarning",
+    "inlinehelp_registry_duplicates": "PASS — opname-variance: 1 occurrence, transfer-status: 1 occurrence",
+    "inlinehelp_ap_aging_entry": "PASS — ap-aging key exists in registry with non-empty title+content",
+    "write_off_409_conflict": "PASS — HTTP 409 for already-written-off invoice",
+    "write_off_400_no_reason": "PASS — HTTP 400 when reason missing",
+    "write_off_200_success": "PASS — HTTP 200 with status=written_off and je_id present",
+    "write_off_frontend_buttons": "PASS — 10 write-off buttons visible on /finance/ar-invoices",
+    "write_off_frontend_dialog": "PASS — data-testid=write-off-dialog opens correctly",
+    "write_off_confirm_disabled": "PASS — Konfirmasi Write-off button disabled when textarea empty"
+  },
+  "seed_data_creation": "Used existing invoice 027d7112-d958-494d-b2b0-f8d6b5db3389 for write-off success test (now written_off status)",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "All 3 fixes verified passing. Write-off backend service fully functional. Registry has ap-aging entry but it's only used as a doc example in InlineHelp.jsx — actual AP Aging page (APAging.jsx) uses ap-aging-buckets. Test credentials: admin@torado.id / Torado@2026."
+}
