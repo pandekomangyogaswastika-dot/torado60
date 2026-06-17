@@ -228,6 +228,33 @@
 
 ---
 
+## 📌 EXECUTION LOG (2026-06-17, sesi UI/UX)
+
+### ✅ Phase 0.5 — Token compaction (SELESAI)
+- `PageHeader.jsx`: h1 `text-3xl→text-lg/xl/2xl`, icon `h-11→h-9/10`, `mb-5/6→mb-3/4`.
+- `KpiCard.jsx`: `p-5→p-4`, value `text-[28px]→text-[22px]`, icon `h-9→h-8`, `mb-3/mt-3→mb-2/mt-2`, blur `h-28→h-20`.
+- Verified: esbuild clean; screenshot Finance (light) + Owner (dark) @1280×800 → KPI lebih ringkas, tema utuh.
+
+### ✅ Phase 1a — Sidebar logic (SELESAI)
+- `Sidebar.jsx`: **double-active FIXED** (leaf-only background; parent section hanya text highlight, tanpa bg).
+- **Flatten single-item sections** → render sebagai link langsung (Owner Financial Health/AI Insights, Outlet CRM/Daily Orders/End-of-Day, Executive Analytics/Reservasi, Admin Master Data/Settings/CMS/SEO, dll).
+- **Compaction**: width `280→248px`, item/section `text-sm→text-[13px]`, padding rapat, `space-y-1→space-y-0.5`.
+- Verified: esbuild clean; screenshot light+dark → no double-active, sidebar muat lebih banyak.
+
+### ✅ Phase 1b — IA dedup aman (SELESAI; tab tujuan sudah ada)
+- Finance Reports **8→1** (`Reports Hub`; 7 deep-link `?tab=` dihapus dari sidebar — tab ada di `/finance/reports`).
+- Procurement Vendors **dedup**: hapus Scorecard/Comparison dari sidebar + Vendor Catalog/AI Recommend dari Smart Procurement (pill-link sudah ada di `/procurement/vendors`).
+- **Hasil audit IA:** procurement **15→11 (≤12 ✓)**, finance **32→25**. Parity **0 ORPHAN MODULE**.
+
+### 🟡 Phase 1c — Hub consolidation (BELUM; butuh konfirmasi user, perubahan IA besar)
+Untuk capai ≤12 di finance/admin/executive perlu bikin hub+tabs (risiko regresi lebih tinggi):
+- Finance Payments (8 item) → Payments Hub; Tax (3) → Tax Center tabs → target finance ≤12.
+- Admin Operations (8) → Operations Hub; Loyalty (5) → Loyalty Hub → target admin ≤12.
+- Executive 13→12 (merge Period Compare/Analytics).
+**Status:** menunggu aba-aba user untuk lanjut (sudah disetujui di §1, tapi konfirmasi ulang krn menggabung banyak halaman).
+
+---
+
 ## 4) Success Criteria
 - **Theme preserved**: aurora/glassmorphism + Inter tidak berubah; hanya density/spacing/IA/flow.
 - **Viewport 15" ready**: @1280×800, halaman kunci memenuhi above-the-fold rule.

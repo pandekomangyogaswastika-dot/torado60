@@ -98,14 +98,9 @@ export const financeNav = {
       name: "Reports",
       icon: FileText,
       items: [
-        { id: "reports-hub",    name: "Reports Hub",    path: "/finance/reports" },
-        { id: "trial-balance",  name: "Trial Balance",  path: "/finance/reports?tab=trial-balance" },
-        { id: "profit-loss",    name: "Profit & Loss",  path: "/finance/reports?tab=profit-loss" },
-        { id: "balance-sheet",  name: "Balance Sheet",  path: "/finance/reports?tab=balance-sheet" },
-        { id: "cashflow",       name: "Cashflow",       path: "/finance/reports?tab=cashflow" },
-        { id: "comparatives",   name: "Period Compare", path: "/finance/reports?tab=comparatives" },
-        { id: "report-builder", name: "Custom Reports", path: "/finance/reports?tab=report-builder" },
-        { id: "pivot",          name: "Pivot Analysis", path: "/finance/reports?tab=pivot" },
+        { id: "reports-hub", name: "Reports Hub", path: "/finance/reports" },
+        // Trial Balance · P&L · Balance Sheet · Cashflow · Period Compare · Custom Reports
+        // · Pivot are in-page TABS of /finance/reports (removed from sidebar to dedupe IA).
       ],
     },
     {

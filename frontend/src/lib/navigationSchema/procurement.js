@@ -100,8 +100,8 @@ export const procurementNav = {
       icon: Store,
       items: [
         { id: "vendors", name: "All Vendors", path: "/procurement/vendors" },
-        { id: "scorecard", name: "Vendor Scorecard", path: "/procurement/vendor-scorecard" },
-        { id: "comparison", name: "Vendor Comparison", path: "/procurement/vendor-comparison" },
+        // Vendor Scorecard · Comparison · AI Recommend · Item Catalog are pill-links
+        // inside /procurement/vendors (removed from sidebar to dedupe IA).
       ],
     },
     {
@@ -119,8 +119,8 @@ export const procurementNav = {
       icon: BarChart3,
       items: [
         { id: "price-intelligence", name: "Price Intelligence", path: "/procurement/price-intelligence" },
-        { id: "vendor-catalog", name: "Vendor Item Catalog", path: "/procurement/vendor-catalog" },
-        { id: "vendor-recommend", name: "AI Vendor Recommend", path: "/procurement/vendor-recommend" },
+        // Vendor Item Catalog · AI Vendor Recommend are pill-links inside
+        // /procurement/vendors (removed from sidebar to dedupe IA).
       ],
     },
   ],

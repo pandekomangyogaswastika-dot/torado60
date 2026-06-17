@@ -1,34 +1,26 @@
 [
   {
-    "content": "Copy torado60 repo into /app (preserve protected .env files + platform .git)",
+    "content": "Phase 0.5: Compact tokens — PageHeader + KpiCard",
     "status": "completed"
   },
   {
-    "content": "Install backend (pip) and frontend (yarn) dependencies",
+    "content": "Phase 1a: Sidebar.jsx — double-active fix, flatten single-item, compaction (w-248)",
     "status": "completed"
   },
   {
-    "content": "Restart services and verify backend/frontend boot cleanly",
+    "content": "Phase 1b: IA dedup — Finance Reports 8→1, Procurement 15→11",
     "status": "completed"
   },
   {
-    "content": "Run bash scripts/seed_reset.sh (full DB seed, 20 steps)",
-    "status": "completed"
+    "content": "Verify: esbuild compile + audit_ui_ia.py + screenshots @1280x800 light+dark",
+    "status": "in_progress"
   },
   {
-    "content": "Run integrity gate: scripts/verify_data_integrity.py (21/21)",
-    "status": "completed"
+    "content": "Phase 1c: Hub consolidation (Finance Payments/Tax, Admin Operations/Loyalty) to reach finance/admin ≤12 — needs user confirm",
+    "status": "pending"
   },
   {
-    "content": "Run scripts/health_check.py (25/25) + intent audits (5portals 25/25, remaining 21/21)",
-    "status": "completed"
-  },
-  {
-    "content": "Run bash scripts/audit_all.sh (FE compile + parity + IA) + pytest",
-    "status": "completed"
-  },
-  {
-    "content": "Verify app renders with real data (screenshot login + a portal)",
-    "status": "completed"
+    "content": "Frontend testing agent: navigation/IA regression",
+    "status": "pending"
   }
 ]

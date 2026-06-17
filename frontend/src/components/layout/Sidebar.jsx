@@ -4,6 +4,12 @@
  * collapse toggle. Pinned/Recent quick-access lists were removed 2026-06 per
  * user request to keep the main menu compact and prevent it from being pushed
  * down on 15" laptops.
+ *
+ * UI/UX 2026-06 (plan.md Phase 1):
+ *  - Width 280→248px; font/padding compacted (text-[13px]) for 15" laptops.
+ *  - Leaf-only active model: parent section that contains the active route gets
+ *    only a subtle TEXT highlight (no background) — fixes the "double-active" bug.
+ *  - Single-item sections are FLATTENED into a direct link (no mubazir collapsible).
  */
 import { useState, useCallback } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -56,12 +62,15 @@ export default function Sidebar() {
 
   const isSectionActive = (section) => section.items.some((item) => location.pathname === item.path);
 
+  const itemTestId = (item) =>
+    `sidebar-nav-item-${item.id || item.path.replace(/[^a-z0-9]/gi, "-")}`;
+
   return (
     <TooltipProvider delayDuration={150}>
       <aside
         className={cn(
           "hidden lg:flex flex-col border-r border-border bg-card/30 backdrop-blur-md transition-all duration-300",
-          sidebarCollapsed ? "w-[76px]" : "w-[280px]"
+          sidebarCollapsed ? "w-[76px]" : "w-[248px]"
         )}
         data-testid="sidebar"
       >
@@ -89,20 +98,67 @@ export default function Sidebar() {
         </div>
 
         {/* Sidebar content - enforce scroll container */}
-        <ScrollArea className="flex-1 px-3 py-4 h-0">
-          <nav className="space-y-1">
+        <ScrollArea className="flex-1 px-2.5 py-3 h-0">
+          <nav className="space-y-0.5">
             {sections.map((section) => {
               const Icon = section.icon;
               const isExpanded = expandedSections[section.id] ?? true;
               const isActive = isSectionActive(section);
 
+              // ── Flattened single-item section → render as a direct leaf link ──
+              if (section.items.length === 1) {
+                const only = section.items[0];
+                const active = isItemActive(only.path);
+                const flatLink = (
+                  <Link
+                    to={only.path}
+                    className={cn(
+                      "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors",
+                      active
+                        ? "text-foreground bg-foreground/[0.08]"
+                        : "text-muted-foreground hover:text-foreground hover:bg-foreground/[0.04]"
+                    )}
+                    data-testid={`sidebar-section-${section.id}`}
+                    aria-label={section.name}
+                  >
+                    <Icon className="h-4 w-4 shrink-0" />
+                    {!sidebarCollapsed && (
+                      <>
+                        <span className="flex-1 text-left truncate">{section.name}</span>
+                        {only.badge && (
+                          <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-foreground/10 text-foreground/70">
+                            {only.badge}
+                          </span>
+                        )}
+                      </>
+                    )}
+                  </Link>
+                );
+
+                return (
+                  <div key={section.id}>
+                    {sidebarCollapsed ? (
+                      <Tooltip>
+                        <TooltipTrigger asChild>{flatLink}</TooltipTrigger>
+                        <TooltipContent side="right" className="max-w-[260px]">
+                          <div className="text-xs font-semibold">{section.name}</div>
+                        </TooltipContent>
+                      </Tooltip>
+                    ) : (
+                      flatLink
+                    )}
+                  </div>
+                );
+              }
+
+              // ── Multi-item section → collapsible (leaf-only active model) ──
               const sectionButton = (
                 <button
                   onClick={() => toggleSection(section.id)}
                   className={cn(
-                    "w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
+                    "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors",
                     isActive
-                      ? "text-foreground bg-foreground/[0.07]"
+                      ? "text-foreground"
                       : "text-muted-foreground hover:text-foreground hover:bg-foreground/[0.04]"
                   )}
                   data-testid={`sidebar-section-${section.id}`}
@@ -113,9 +169,9 @@ export default function Sidebar() {
                     <>
                       <span className="flex-1 text-left truncate">{section.name}</span>
                       {isExpanded ? (
-                        <ChevronDown className="h-3 w-3 shrink-0" />
+                        <ChevronDown className="h-3 w-3 shrink-0 opacity-60" />
                       ) : (
-                        <ChevronRight className="h-3 w-3 shrink-0" />
+                        <ChevronRight className="h-3 w-3 shrink-0 opacity-60" />
                       )}
                     </>
                   )}
@@ -123,7 +179,7 @@ export default function Sidebar() {
               );
 
               return (
-                <div key={section.id} className="space-y-1">
+                <div key={section.id} className="space-y-0.5">
                   {/* Section header (with tooltip when collapsed) */}
                   {sidebarCollapsed ? (
                     <Tooltip>
@@ -151,7 +207,7 @@ export default function Sidebar() {
                         transition={{ duration: 0.2, ease: "easeInOut" }}
                         className="overflow-hidden"
                       >
-                        <div className="ml-6 space-y-0.5 border-l border-border pl-3">
+                        <div className="ml-5 space-y-0.5 border-l border-border pl-2.5">
                           {section.items.map((item) => {
                             const isItemActv = isItemActive(item.path);
                             return (
@@ -159,12 +215,12 @@ export default function Sidebar() {
                                 key={item.id || item.path}
                                 to={item.path}
                                 className={cn(
-                                  "flex items-center gap-2 px-3 py-1.5 rounded-md text-sm transition-all duration-150",
+                                  "flex items-center gap-2 px-2.5 py-1 rounded-md text-[13px] transition-all duration-150",
                                   isItemActv
-                                    ? "text-foreground font-semibold bg-foreground/[0.08] border-l-2 border-foreground/30 pl-2.5"
+                                    ? "text-foreground font-semibold bg-foreground/[0.08] border-l-2 border-foreground/30 pl-2"
                                     : "text-muted-foreground hover:text-foreground hover:bg-foreground/[0.04]"
                                 )}
-                                data-testid={`sidebar-nav-item-${item.id || item.path.replace(/[^a-z0-9]/gi, "-")}`}
+                                data-testid={itemTestId(item)}
                               >
                                 <span className="flex-1 truncate">{item.name}</span>
                                 {item.badge && (

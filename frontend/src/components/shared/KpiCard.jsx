@@ -26,23 +26,23 @@ export default function KpiCard({
       onClick={onClick}
       data-testid={computedTestId}
       className={cn(
-        "glass-card-hover relative overflow-hidden p-5 text-left w-full block group",
+        "glass-card-hover relative overflow-hidden p-4 text-left w-full block group",
         onClick ? "cursor-pointer" : "cursor-default",
       )}
     >
       {/* accent wash that intensifies on hover */}
       <div
-        className="pointer-events-none absolute -right-8 -top-10 h-28 w-28 rounded-full opacity-50 blur-2xl transition-opacity duration-300 group-hover:opacity-90"
+        className="pointer-events-none absolute -right-8 -top-10 h-20 w-20 rounded-full opacity-50 blur-2xl transition-opacity duration-300 group-hover:opacity-90"
         style={{ background: `hsl(var(--${color}) / 0.18)` }}
         aria-hidden
       />
-      <div className="relative flex items-start justify-between gap-2 mb-3">
+      <div className="relative flex items-start justify-between gap-2 mb-2">
         <span className="text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground leading-tight">
           {label}
         </span>
         {Icon && (
           <div
-            className="h-9 w-9 shrink-0 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+            className="h-8 w-8 shrink-0 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
             style={{ background: `hsl(var(--${color}) / 0.15)`, color: `hsl(var(--${color}))` }}
           >
             <Icon className="h-4 w-4" />
@@ -50,11 +50,11 @@ export default function KpiCard({
         )}
       </div>
 
-      <div className={cn("relative font-bold tracking-tight tabular-nums leading-none", subtle ? "text-xl lg:text-2xl" : "text-2xl lg:text-[28px]")}>
+      <div className={cn("relative font-bold tracking-tight tabular-nums leading-none", subtle ? "text-lg lg:text-xl" : "text-xl lg:text-[22px]")}>
         {value}
       </div>
 
-      <div className="relative mt-3 flex items-end justify-between gap-2">
+      <div className="relative mt-2 flex items-end justify-between gap-2">
         <div className="flex items-center gap-2 min-w-0">
           {hasDelta && (
             <span
