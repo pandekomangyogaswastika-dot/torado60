@@ -73,9 +73,9 @@ export const adminNav = {
       icon: Users,
       reqPerm: "admin.user",
       items: [
-        { id: "users", name: "All Users", path: "/admin/users" },
-        { id: "roles", name: "Roles & Permissions", path: "/admin/roles" },
-        { id: "audit-log", name: "Activity Log", path: "/admin/audit-log" },
+        { id: "user-mgmt-hub", name: "User Management", path: "/admin/user-management" },
+        // All Users · Roles & Permissions · Activity Log are in-page TABS of
+        // /admin/user-management (User Management Hub).
       ],
     },
     {
@@ -95,11 +95,9 @@ export const adminNav = {
       items: [
         { id: "business-rules", name: "Business Rules", path: "/admin/configuration" },
         { id: "approval-matrix", name: "Approval Matrix", path: "/admin/approvals", badge: "Builder" },
-        // REMOVED: Approval Workflows (Legacy) - superseded by Approval Matrix Builder
-        { id: "bulk-import", name: "Bulk Excel Import", path: "/admin/bulk-import", badge: "New" },
-        { id: "number-series", name: "Number Series", path: "/admin/number-series" },
         { id: "integrations", name: "Integrations", path: "/admin/integrations" },
-        { id: "tax-config", name: "Tax Config", path: "/admin/tax" },
+        { id: "setup", name: "Setup & Numbering", path: "/admin/setup" },
+        // Number Series · Tax Config · Bulk Excel Import are in-page TABS of /admin/setup.
       ],
     },
     {
@@ -107,11 +105,9 @@ export const adminNav = {
       name: "Loyalty Program",
       icon: Star,
       items: [
-        { id: "loyalty-overview", name: "Loyalty Overview", path: "/admin/loyalty" },
-        { id: "loyalty-customers", name: "Customers", path: "/admin/loyalty/customers" },
-        { id: "loyalty-rewards", name: "Rewards Catalog", path: "/admin/loyalty/rewards" },
-        { id: "loyalty-redemptions", name: "Redemptions", path: "/admin/loyalty/redemptions" },
-        { id: "loyalty-analytics", name: "CRM Analytics", path: "/admin/loyalty/analytics" },
+        { id: "loyalty-hub", name: "Loyalty Program", path: "/admin/loyalty" },
+        // Overview · Customers · Rewards Catalog · Redemptions · CRM Analytics are
+        // in-page TABS of /admin/loyalty (Loyalty Hub).
       ],
     },
     {
@@ -120,14 +116,9 @@ export const adminNav = {
       icon: Activity,
       reqPerm: "admin.audit_log",
       items: [
-        { id: "ops-metrics", name: "System Metrics", path: "/admin/operations" },
-        { id: "ops-logs", name: "System Logs", path: "/admin/operations/logs" },
-        { id: "ops-scheduler", name: "Scheduler", path: "/admin/operations/scheduler" },
-        { id: "ops-archival", name: "Archival", path: "/admin/operations/archival" },
-        { id: "ops-rate-limits", name: "Rate Limits", path: "/admin/operations/rate-limits" },
-        { id: "report-schedules", name: "Laporan Terjadwal", path: "/admin/report-schedules" },
-        { id: "data-management", name: "Manajemen Data", path: "/admin/data-management" },
-        { id: "tour-analytics", name: "Tour Analytics", path: "/admin/tour-analytics" },
+        { id: "ops-hub", name: "Operations & Monitoring", path: "/admin/operations" },
+        // System Metrics · Logs · Scheduler · Archival · Rate Limits · Laporan Terjadwal
+        // · Manajemen Data · Tour Analytics are in-page TABS of /admin/operations.
       ],
     },
     {

@@ -1,5 +1,5 @@
 import { useLocation, Link, Navigate } from "react-router-dom";
-import { Activity, ScrollText as LogIcon, Calendar as CalIcon, Archive as ArchiveIcon, Gauge } from "lucide-react";
+import { Activity, ScrollText as LogIcon, Calendar as CalIcon, Archive as ArchiveIcon, Gauge, CalendarClock, Database, MousePointerClick } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -8,6 +8,9 @@ import LogsView from "./operations/LogsView";
 import SchedulerView from "./operations/SchedulerView";
 import ArchivalView from "./operations/ArchivalView";
 import RateLimitsView from "./operations/RateLimitsView";
+import ReportSchedules from "./ReportSchedules";
+import DataManagement from "./DataManagement";
+import TourAnalytics from "./TourAnalytics";
 
 const SUB_PAGES = [
   { path: "", exact: true, label: "Metrics", icon: Gauge, render: () => <MetricsView /> },
@@ -15,6 +18,9 @@ const SUB_PAGES = [
   { path: "scheduler", label: "Scheduler", icon: CalIcon, render: () => <SchedulerView /> },
   { path: "archival", label: "Archival", icon: ArchiveIcon, render: () => <ArchivalView /> },
   { path: "rate-limits", label: "Rate Limits", icon: Activity, render: () => <RateLimitsView /> },
+  { path: "report-schedules", label: "Laporan Terjadwal", icon: CalendarClock, render: () => <ReportSchedules /> },
+  { path: "data-management", label: "Manajemen Data", icon: Database, render: () => <DataManagement /> },
+  { path: "tour-analytics", label: "Tour Analytics", icon: MousePointerClick, render: () => <TourAnalytics /> },
 ];
 
 export default function Operations() {

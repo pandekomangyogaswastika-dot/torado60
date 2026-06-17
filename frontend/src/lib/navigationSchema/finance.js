@@ -83,14 +83,10 @@ export const financeNav = {
       name: "Payments",
       icon: CreditCard,
       items: [
-        { id: "payment-requests", name: "Payment Requests", path: "/finance/payment-requests" },
-        { id: "ap", name: "Accounts Payable", path: "/finance/ap-aging" },
-        { id: "payments", name: "Payments", path: "/finance/payments" },
-        { id: "payment-runs", name: "Payment Runs", path: "/finance/payment-runs" },
-        { id: "payment-run-templates", name: "Run Templates", path: "/finance/payment-run-templates" },
-        { id: "bank-recon", name: "Bank Reconciliation", path: "/finance/bank-recon" },
-        { id: "ar-invoices", name: "AR Invoices", path: "/finance/ar-invoices" },
-        { id: "reservation-deposits", name: "Deposit Reservasi", path: "/finance/reservation-deposits" },
+        { id: "payments-hub", name: "Payments", path: "/finance/payments-hub" },
+        // Payment Requests · Accounts Payable · Payments · Payment Runs · Run Templates
+        // · Bank Reconciliation · AR Invoices · Deposit Reservasi are in-page TABS of
+        // /finance/payments-hub (consolidated to keep Finance sidebar <=12 items).
       ],
     },
     {
@@ -109,8 +105,7 @@ export const financeNav = {
       icon: FileCheck,
       items: [
         { id: "tax", name: "Tax Center", path: "/finance/tax" },
-        { id: "efaktur", name: "e-Faktur", path: "/finance/efaktur" },
-        { id: "ebupot", name: "e-Bupot", path: "/finance/ebupot" },
+        // e-Faktur · e-Bupot are in-page TABS of /finance/tax (Tax Hub).
       ],
     },
     {
@@ -119,9 +114,9 @@ export const financeNav = {
       icon: Landmark,
       items: [
         { id: "assets", name: "Fixed Assets", path: "/finance/assets" },
-        { id: "budget", name: "Budget vs Actual", path: "/finance/budget" },
-        { id: "budget-manage", name: "Budget Management", path: "/finance/budget/manage" },
-        { id: "forecasting", name: "Forecasting", path: "/finance/forecasting" },
+        { id: "budget-hub", name: "Budget", path: "/finance/budget-hub" },
+        // Budget vs Actual · Budget Management · Forecasting are in-page TABS of
+        // /finance/budget-hub (consolidated to keep Finance sidebar <=12 items).
       ],
     },
     {
@@ -129,9 +124,9 @@ export const financeNav = {
       name: "Period Closing",
       icon: Calendar,
       items: [
-        { id: "period-closing-hub", name: "Period Closing Workflow", path: "/finance/period-closing", badge: "NEW" },
-        { id: "periods", name: "Periods (List)", path: "/finance/periods" },
-        { id: "anomalies", name: "Anomaly Feed", path: "/finance/anomalies" },
+        { id: "period-closing-hub", name: "Period Closing", path: "/finance/period-closing", badge: "NEW" },
+        // Periods (List) & Anomaly Feed are built-in PHASES of the Period Closing
+        // workflow (/finance/period-closing) — standalone routes kept for deep-links.
       ],
     },
     {

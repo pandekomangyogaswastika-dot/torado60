@@ -17,6 +17,8 @@ import ComingSoonPage from "@/components/shared/ComingSoonPage";
 import AdminHome from "./AdminHome";
 import Users from "./Users";
 import Roles from "./Roles";
+import UserManagementHub from "./UserManagementHub";
+import AdminSetupHub from "./AdminSetupHub";
 import MasterData from "./MasterData";
 import MasterDataHub from "./MasterDataHub";
 import BulkImport from "./BulkImport";
@@ -37,6 +39,7 @@ import IncentiveSchemesPage from "./configuration/IncentiveSchemesPage";
 import AnomalyThresholdsPage from "./configuration/AnomalyThresholdsPage";
 import EffectiveDatingTimelinePage from "./configuration/EffectiveDatingTimelinePage";
 import LoyaltyAdminHome from "./loyalty/LoyaltyAdminHome";
+import LoyaltyHub from "./loyalty/LoyaltyHub";
 import LoyaltyAdminCustomers from "./loyalty/LoyaltyAdminCustomers";
 import LoyaltyAdminCustomerDetail from "./loyalty/LoyaltyAdminCustomerDetail";
 import LoyaltyAdminRewards from "./loyalty/LoyaltyAdminRewards";
@@ -71,6 +74,9 @@ export default function AdminPortal() {
         <Route index element={<AdminHome />} />
         <Route path="users" element={<Users />} />
         <Route path="roles" element={<Roles />} />
+        {/* Unified hubs (IA consolidation) */}
+        <Route path="user-management" element={<UserManagementHub />} />
+        <Route path="setup" element={<AdminSetupHub />} />
         <Route path="master" element={<Navigate to="/admin/master/items" replace />} />
         <Route path="master-data" element={<Navigate to="/admin/master/items" replace />} />
         <Route path="master/:entity" element={<MasterDataHub />} />
@@ -98,8 +104,8 @@ export default function AdminPortal() {
         {/* System Settings (real page, not Coming Soon) */}
         <Route path="settings" element={<SystemSettings />} />
 
-        {/* Loyalty admin nested routes */}
-        <Route path="loyalty" element={<LoyaltyAdminHome />} />
+        {/* Loyalty admin — unified hub (Overview/Customers/Rewards/Redemptions/Analytics tabs) */}
+        <Route path="loyalty" element={<LoyaltyHub />} />
         <Route path="loyalty/customers" element={<LoyaltyAdminCustomers />} />
         <Route path="loyalty/customers/:customerId" element={<LoyaltyAdminCustomerDetail />} />
         <Route path="loyalty/rewards" element={<LoyaltyAdminRewards />} />

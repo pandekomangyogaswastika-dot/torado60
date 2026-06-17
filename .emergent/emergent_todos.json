@@ -12,19 +12,15 @@
     "status": "completed"
   },
   {
-    "content": "Verify: esbuild compile + audit_ui_ia.py + screenshots @1280x800 light+dark",
+    "content": "Phase 1c: Build hubs (Payments, Tax, Budget, Loyalty, Operations+3tabs, UserMgmt, Setup) — Finance & Admin now 12 ✓",
     "status": "completed"
   },
   {
-    "content": "Frontend testing agent: navigation/IA regression — DONE (9 'blank' flags = false-positives, verified all render; no regression)",
-    "status": "completed"
+    "content": "Final audit_all.sh (compile + parity + IA) verification",
+    "status": "in_progress"
   },
   {
-    "content": "Phase 1c: Hub consolidation (Finance Payments/Tax → hub, Admin Operations/Loyalty → hub) to reach finance/admin ≤12 — awaiting user go-ahead (bigger IA change)",
-    "status": "pending"
-  },
-  {
-    "content": "Phase 2: Per-page density (CompactStatCard migration, Akses Cepat affordance, Inventory UUID→name, StatusPill, AI collapsible)",
+    "content": "Comprehensive frontend testing agent: hub render + tab-switch + nav regression across portals",
     "status": "pending"
   }
 ]

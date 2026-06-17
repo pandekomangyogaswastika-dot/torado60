@@ -39,11 +39,14 @@ import FixedAssetList from "./FixedAssetList";
 import FixedAssetDetail from "./FixedAssetDetail";
 import BudgetVsActual from "./BudgetVsActual";
 import BudgetManagement from "./BudgetManagement";
+import BudgetHub from "./BudgetHub";
 import ARInvoiceList from "./ARInvoiceList";
 import PeriodClosingHub from "./PeriodClosingHub";
 import ReservationDeposits from "./ReservationDeposits";
 import ApprovalCenter from "../shared/ApprovalCenter";
 import FinanceReportsHub from "./FinanceReportsHub";
+import FinancePaymentsHub from "./FinancePaymentsHub";
+import FinanceTaxHub from "./FinanceTaxHub";
 
 export default function FinancePortal() {
   const { user } = useAuth();
@@ -53,6 +56,8 @@ export default function FinancePortal() {
       <Routes>
         <Route index element={<FinanceHome />} />
       <Route path="validation" element={<ValidationQueue />} />
+      {/* Payments Hub — all payment sub-pages in one tabbed workspace */}
+      <Route path="payments-hub" element={<FinancePaymentsHub />} />
       <Route path="payments" element={<PaymentList />} />
       <Route path="payments/new" element={<PaymentForm />} />
       <Route path="payments/:id" element={<PaymentDetail />} />
@@ -77,11 +82,15 @@ export default function FinancePortal() {
       <Route path="report-builder" element={<Navigate to="/finance/reports?tab=report-builder" replace />} />
       <Route path="pivot" element={<Navigate to="/finance/reports?tab=pivot" replace />} />
       <Route path="ap-aging" element={<APAging />} />
-      <Route path="tax" element={<TaxCenter />} />
+      {/* Tax & Compliance Hub — Tax Center + e-Faktur + e-Bupot tabs */}
+      <Route path="tax" element={<FinanceTaxHub />} />
+      <Route path="tax-center" element={<TaxCenter />} />
       <Route path="efaktur" element={<EFakturExport />} />
       <Route path="ebupot" element={<EBupotExport />} />
       <Route path="assets" element={<FixedAssetList />} />
       <Route path="assets/:id" element={<FixedAssetDetail />} />
+      {/* Budget Hub — Budget vs Actual + Management + Forecasting tabs */}
+      <Route path="budget-hub" element={<BudgetHub />} />
       <Route path="budget" element={<BudgetVsActual />} />
       <Route path="budget/manage" element={<BudgetManagement />} />
       <Route path="ar-invoices" element={<ARInvoiceList />} />

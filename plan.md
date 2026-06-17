@@ -246,12 +246,18 @@
 - Procurement Vendors **dedup**: hapus Scorecard/Comparison dari sidebar + Vendor Catalog/AI Recommend dari Smart Procurement (pill-link sudah ada di `/procurement/vendors`).
 - **Hasil audit IA:** procurement **15→11 (≤12 ✓)**, finance **32→25**. Parity **0 ORPHAN MODULE**.
 
-### 🟡 Phase 1c — Hub consolidation (BELUM; butuh konfirmasi user, perubahan IA besar)
-Untuk capai ≤12 di finance/admin/executive perlu bikin hub+tabs (risiko regresi lebih tinggi):
-- Finance Payments (8 item) → Payments Hub; Tax (3) → Tax Center tabs → target finance ≤12.
-- Admin Operations (8) → Operations Hub; Loyalty (5) → Loyalty Hub → target admin ≤12.
-- Executive 13→12 (merge Period Compare/Analytics).
-**Status:** menunggu aba-aba user untuk lanjut (sudah disetujui di §1, tapi konfirmasi ulang krn menggabung banyak halaman).
+### ✅ Phase 1c — Hub consolidation (SELESAI — Finance & Admin = 12 item)
+Hub baru (pola FinanceReportsHub, render komponen existing inline sbg tab; URL ?tab=):
+- **FinancePaymentsHub** (`/finance/payments-hub`): 8 tab (Payment Requests · AP · Payments · Payment Runs · Run Templates · Bank Recon · AR Invoices · Deposit Reservasi).
+- **FinanceTaxHub** (`/finance/tax`): 3 tab (Tax Center · e-Faktur · e-Bupot).
+- **FinanceBudgetHub** (`/finance/budget-hub`): 3 tab (Budget vs Actual · Management · Forecasting).
+- **Period Closing** (`/finance/period-closing`): PeriodClosingHub SUDAH mengandung Periods + Anomaly + Wizard + Lock sbg fase → section di-collapse jadi 1 item (tanpa komponen baru).
+- **LoyaltyHub** (`/admin/loyalty`): 5 tab (Overview · Customers · Rewards · Redemptions · CRM Analytics).
+- **Operations & Monitoring** (`/admin/operations`): Operations.jsx diperluas +3 tab (Laporan Terjadwal · Manajemen Data · Tour Analytics) → total 8 tab, sidebar 1 item.
+- **UserManagementHub** (`/admin/user-management`): 3 tab (Users · Roles · Activity Log).
+- **AdminSetupHub** (`/admin/setup`): 3 tab (Number Series · Tax Config · Bulk Import).
+
+**Hasil IA final:** finance **32→12 ✓**, admin **27→12 ✓**, procurement 11, outlet 12, owner 6, hr 6, inventory 8, executive 13 (di luar scope — user minta Finance & Admin saja). esbuild clean, parity **0 ORPHAN MODULE**, frontend compile bersih. Diverifikasi screenshot @1280×800: semua 7 hub render data nyata + tab-switch jalan, sidebar Finance & Admin masing-masing 12 item rapi.
 
 ### ✅ Verifikasi navigasi (testing agent iteration_38 + manual)
 - Testing agent melaporkan 9 "blank screen" → **SEMUA FALSE-POSITIVE** (screenshot diambil sebelum async data load). Diverifikasi manual @1280×800: `/admin/master-data`, `/admin/settings`, `/admin/cms/brands`, `/admin/smart-seo`, `/executive/period-compare` semua render penuh (chart, tabel, form, tabs). `/executive/reservations` & `/outlet/daily-orders` = **empty-state sah** (data belum di-seed, per GROUND_TRUTH Part D), bukan blank.
