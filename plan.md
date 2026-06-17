@@ -253,6 +253,11 @@ Untuk capai ≤12 di finance/admin/executive perlu bikin hub+tabs (risiko regres
 - Executive 13→12 (merge Period Compare/Analytics).
 **Status:** menunggu aba-aba user untuk lanjut (sudah disetujui di §1, tapi konfirmasi ulang krn menggabung banyak halaman).
 
+### ✅ Verifikasi navigasi (testing agent iteration_38 + manual)
+- Testing agent melaporkan 9 "blank screen" → **SEMUA FALSE-POSITIVE** (screenshot diambil sebelum async data load). Diverifikasi manual @1280×800: `/admin/master-data`, `/admin/settings`, `/admin/cms/brands`, `/admin/smart-seo`, `/executive/period-compare` semua render penuh (chart, tabel, form, tabs). `/executive/reservations` & `/outlet/daily-orders` = **empty-state sah** (data belum di-seed, per GROUND_TRUTH Part D), bukan blank.
+- PASS: login, 8/8 portal switch, flatten single-item links navigasi benar, no double-active, Finance Reports tabs utuh, Procurement Vendors pill-links utuh, data nyata render, 0 console error.
+- **Kesimpulan: Phase 0.5 + 1a + 1b TIDAK ada regresi.**
+
 ---
 
 ## 4) Success Criteria
