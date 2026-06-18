@@ -259,6 +259,18 @@ Hub baru (pola FinanceReportsHub, render komponen existing inline sbg tab; URL ?
 
 **Hasil IA final:** finance **32→12 ✓**, admin **27→12 ✓**, procurement 11, outlet 12, owner 6, hr 6, inventory 8, executive 13 (di luar scope — user minta Finance & Admin saja). esbuild clean, parity **0 ORPHAN MODULE**, frontend compile bersih. Diverifikasi screenshot @1280×800: semua 7 hub render data nyata + tab-switch jalan, sidebar Finance & Admin masing-masing 12 item rapi.
 
+### ✅ Phase 2 — Density & flow per halaman (SELESAI)
+- **2a Hero admin tidak berulang**: `AdminPortal.jsx` render `PageHeader "Admin Platform"` HANYA di `/admin` (pakai `useLocation`). Sub-page tak lagi dobel hero.
+- **2b Inventory UUID→nama outlet**: `InventoryHome.jsx` "Valuation per Outlet" map `outlet_id`→`scopedOutlets.name`. Verified: Rucker Park/Altero/Bakkies/De La Sol.
+- **2c AI assistant collapsible**: `ConversationalQA.jsx` prop `collapsible` (default collapsed bar ~44px; expand `h-[460px]`+tombol Tutup; state localStorage `aurora_ai_qa_collapsed`). `ExecutiveHome.jsx` AI dipindah jadi row collapsible (`showKpi={false}`).
+- **2d Akses Cepat cross-portal**: `OwnerHome` `ShortcutCard` prop `crossPortal` → badge `ArrowUpRight` + legend "↗ pindah ke portal lain". In-portal tanpa panah.
+- **2e StatusPill konsisten**: `StatusPill` terima `label` override + tambah CSS status (awaiting_approval/partial/received/posted/in_progress/sent/converted). `LeaveRequests` pakai StatusPill.
+- **2f CompactStatCard**: komponen kanonik baru (sm/md, clickable, badge, loading). `KpiTile` OwnerHome delegasi ke CompactStatCard (testid `owner-kpi-*` dipertahankan).
+- **2g Executive 13→11**: hub baru `ExecutiveAnalyticsHub` (Brand Mix+Profit Walk+Period Compare) → "Performance Analytics" 1 item.
+
+**Hasil IA final: SEMUA portal ≤12** — admin 12, finance 12, executive **11**, outlet 12, procurement 11, inventory 8, hr 6, owner 6. esbuild clean, parity **0 ORPHAN MODULE**. Diverifikasi screenshot @1280×800.
+
+
 ### ✅ Verifikasi navigasi (testing agent iteration_38 + manual)
 - Testing agent melaporkan 9 "blank screen" → **SEMUA FALSE-POSITIVE** (screenshot diambil sebelum async data load). Diverifikasi manual @1280×800: `/admin/master-data`, `/admin/settings`, `/admin/cms/brands`, `/admin/smart-seo`, `/executive/period-compare` semua render penuh (chart, tabel, form, tabs). `/executive/reservations` & `/outlet/daily-orders` = **empty-state sah** (data belum di-seed, per GROUND_TRUTH Part D), bukan blank.
 - PASS: login, 8/8 portal switch, flatten single-item links navigasi benar, no double-active, Finance Reports tabs utuh, Procurement Vendors pill-links utuh, data nyata render, 0 console error.

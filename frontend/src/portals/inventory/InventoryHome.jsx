@@ -189,12 +189,15 @@ export default function InventoryHome() {
             <div className="text-sm text-muted-foreground italic">Belum ada nilai inventory.</div>
           ) : (
             <div className="space-y-2">
-              {Object.entries(val.by_outlet).map(([oid, value]) => (
-                <div key={oid} className="glass-input rounded-xl px-3 py-2 flex items-center justify-between">
-                  <span className="text-sm">{oid}</span>
-                  <span className="font-semibold tabular-nums">{fmtRp(value)}</span>
-                </div>
-              ))}
+              {Object.entries(val.by_outlet).map(([oid, value]) => {
+                const o = scopedOutlets.find(x => x.id === oid);
+                return (
+                  <div key={oid} className="glass-input rounded-xl px-3 py-2 flex items-center justify-between">
+                    <span className="text-sm">{o?.name || oid}</span>
+                    <span className="font-semibold tabular-nums">{fmtRp(value)}</span>
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>

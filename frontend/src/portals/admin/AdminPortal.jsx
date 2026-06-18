@@ -7,7 +7,7 @@
  *   Schedules, CMS Reviews/Analytics/Pages, Loyalty Analytics) sekarang
  *   ditambahkan ke `navigationSchema.js` agar konsisten.
  */
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { Settings as SettingsIcon } from "lucide-react";
 
 import { useAuth } from "@/lib/auth";
@@ -61,15 +61,22 @@ import TourAnalytics from "./TourAnalytics";
 
 export default function AdminPortal() {
   const { user } = useAuth();
+  const location = useLocation();
   if (!user) return null;
+
+  // Phase 2: the "Admin Platform" hero is shown ONLY on the Admin home (/admin).
+  // Sub-pages have their own headers, so the repeated hero is removed for density.
+  const isAdminHome = location.pathname === "/admin" || location.pathname === "/admin/";
 
   return (
     <div className="max-w-7xl mx-auto" data-testid="admin-portal">
-      <PageHeader
-        icon={SettingsIcon}
-        title="Admin Platform"
-        subtitle="Master data, users, roles, dan konfigurasi sistem"
-      />
+      {isAdminHome && (
+        <PageHeader
+          icon={SettingsIcon}
+          title="Admin Platform"
+          subtitle="Master data, users, roles, dan konfigurasi sistem"
+        />
+      )}
       <Routes>
         <Route index element={<AdminHome />} />
         <Route path="users" element={<Users />} />

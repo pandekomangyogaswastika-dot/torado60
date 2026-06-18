@@ -9,6 +9,7 @@ import { InlineHelp } from "@/components/shared/InlineHelp";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import StatusPill from "@/components/shared/StatusPill";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -42,8 +43,9 @@ const LEAVE_TYPE_LABELS = {
 
 function LeaveStatusBadge({ status }) {
   const m = LEAVE_STATUS_MAP[status] || LEAVE_STATUS_MAP.draft;
-  return <Badge variant={m.color === "success" ? "default" : m.color}
-    className={m.color === "success" ? "bg-green-600" : ""}>{m.label}</Badge>;
+  // Phase 2: use the shared StatusPill for visual consistency, keeping the
+  // HR-specific Indonesian label via the `label` override.
+  return <StatusPill status={status} label={m.label} />;
 }
 
 export default function LeaveRequests() {

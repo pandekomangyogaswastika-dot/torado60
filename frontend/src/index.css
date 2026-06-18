@@ -303,6 +303,13 @@ a[href*="emergent.sh"],
   .status-cancelled { @apply bg-zinc-300 text-zinc-700 line-through dark:bg-zinc-700 dark:text-zinc-300; }
   .status-active    { @apply bg-emerald-500/15 text-emerald-700 dark:text-emerald-400; }
   .status-disabled  { @apply bg-zinc-300 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300; }
+  .status-awaiting_approval { @apply bg-amber-500/15 text-amber-700 dark:text-amber-400; }
+  .status-partial   { @apply bg-amber-500/15 text-amber-700 dark:text-amber-400; }
+  .status-received  { @apply bg-emerald-500/15 text-emerald-700 dark:text-emerald-400; }
+  .status-posted    { @apply bg-emerald-500/15 text-emerald-700 dark:text-emerald-400; }
+  .status-in_progress { @apply bg-blue-500/15 text-blue-700 dark:text-blue-400; }
+  .status-sent      { @apply bg-blue-500/15 text-blue-700 dark:text-blue-400; }
+  .status-converted { @apply bg-violet-500/15 text-violet-700 dark:text-violet-400; }
 
   /* Screen-reader utility (used by skip-link) */
   .sr-only {

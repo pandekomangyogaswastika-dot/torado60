@@ -180,8 +180,14 @@ export default function ExecutiveHome() {
             </p>
           </div>
         </div>
-        {(can("ai.chat.use") || can("ai.exec_qa.use")) && <ConversationalQA />}
       </div>
+
+      {/* AI assistant — collapsible (default collapsed) so it doesn't dominate the dashboard */}
+      {(can("ai.chat.use") || can("ai.exec_qa.use")) && (
+        <div className="mb-5" data-testid="exec-ai-row">
+          <ConversationalQA collapsible showKpi={false} />
+        </div>
+      )}
 
       {/* Filter bar */}
       <div className="mb-5 glass-card p-3 flex flex-wrap items-center gap-2" data-testid="exec-filterbar">

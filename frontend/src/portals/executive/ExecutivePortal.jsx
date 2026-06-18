@@ -20,6 +20,7 @@ import PeriodCompare from "./PeriodCompare";
 import ReservationSummary from "./ReservationSummary";
 import BudgetApprovals from "./BudgetApprovals";
 import BrandMixOverview from "./BrandMixOverview";
+import ExecutiveAnalyticsHub from "./ExecutiveAnalyticsHub";
 import ExecutiveQA from "./ExecutiveQA";
 import AnomalyDetection from "./AnomalyDetection";
 import OutletBudgetAllocation from "./OutletBudgetAllocation";
@@ -55,6 +56,8 @@ export default function ExecutivePortal() {
       <Route path="ai-qa" element={<ExecutiveQA />} />
       <Route path="anomaly" element={<AnomalyDetection />} />
       <Route path="brand" element={<BrandMixOverview />} />
+      {/* Phase 2g — unified Performance Analytics hub (Brand Mix + Profit Walk + Period Compare) */}
+      <Route path="analytics-hub" element={<ExecutiveAnalyticsHub />} />
 
       <Route
         path="approvals"

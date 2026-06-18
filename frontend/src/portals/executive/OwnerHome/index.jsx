@@ -17,7 +17,7 @@ import {
   CreditCard, Building2, Crown, RefreshCw,
   ArrowRight, ChevronRight, Wallet, FileText,
   ClipboardList, Activity, Settings, LogOut,
-  Star, Zap, Clock, CircleAlert,
+  Star, Zap, Clock, CircleAlert, ArrowUpRight,
 } from "lucide-react";
 
 import { useOwnerHome } from "@/hooks/useOwnerDashboard";
@@ -28,6 +28,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { InlineHelp } from "@/components/shared/InlineHelp";
+import CompactStatCard from "@/components/shared/CompactStatCard";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -51,55 +52,33 @@ const todayStr = () => {
 // ---------------------------------------------------------------------------
 // KPI Tile
 // ---------------------------------------------------------------------------
-function KpiTile({ label, value, sub, icon: Icon, color, onClick, badge, loading }) {
+function KpiTile({ label, value, sub, icon, color, onClick, badge, loading }) {
+  // Phase 2: delegate to the canonical CompactStatCard (reduces stat-card variants),
+  // preserving the owner-kpi-* testids the rest of the app relies on.
   return (
-    <motion.button
-      whileHover={{ y: -2, scale: 1.01 }}
-      whileTap={{ scale: 0.98 }}
+    <CompactStatCard
+      label={label}
+      value={value}
+      sub={sub}
+      icon={icon}
+      color={color}
       onClick={onClick}
-      className={cn(
-        "relative text-left w-full rounded-2xl border border-border/60 bg-card p-5 shadow-sm",
-        "hover:shadow-md hover:border-primary/30 transition-all duration-200 group",
-        onClick ? "cursor-pointer" : "cursor-default",
-      )}
-      data-testid={`owner-kpi-${label?.toLowerCase().replace(/\s+/g, "-")}`}
-    >
-      {badge !== undefined && badge > 0 && (
-        <span className="absolute -top-1.5 -right-1.5 h-5 min-w-5 rounded-full bg-red-500 text-white text-xs font-bold flex items-center justify-center px-1">
-          {badge > 99 ? "99+" : badge}
-        </span>
-      )}
-      <div className="flex items-start justify-between mb-3">
-        <div
-          className="h-10 w-10 rounded-xl flex items-center justify-center flex-shrink-0"
-          style={{
-            background: `hsl(var(--${color ?? "aurora-1"}) / 0.12)`,
-            color: `hsl(var(--${color ?? "aurora-1"}))`,
-          }}
-        >
-          {Icon && <Icon className="h-5 w-5" />}
-        </div>
-        <ChevronRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity mt-0.5" />
-      </div>
-      {loading ? (
-        <Skeleton className="h-8 w-28 mb-1" />
-      ) : (
-        <div className="text-2xl font-bold tabular-nums tracking-tight">{value}</div>
-      )}
-      <div className="text-xs text-muted-foreground mt-1 font-medium">{label}</div>
-      {sub && <div className="text-xs text-muted-foreground/70 mt-0.5">{sub}</div>}
-    </motion.button>
+      badge={badge}
+      loading={loading}
+      testIdPrefix="owner-kpi"
+    />
   );
 }
 
 // ---------------------------------------------------------------------------
 // Shortcut Card
 // ---------------------------------------------------------------------------
-function ShortcutCard({ to, icon: Icon, label, color, count, testid }) {
+function ShortcutCard({ to, icon: Icon, label, color, count, testid, crossPortal }) {
   return (
     <Link
       to={to}
       data-testid={testid || `shortcut-${label?.toLowerCase().replace(/\s+/g, "-")}`}
+      title={crossPortal ? `Buka portal ${label} (pindah portal)` : label}
       className={cn(
         "relative flex flex-col items-center gap-2 p-4 rounded-2xl border border-border/50",
         "bg-card hover:bg-muted/40 hover:border-primary/30 hover:shadow-sm",
@@ -109,6 +88,15 @@ function ShortcutCard({ to, icon: Icon, label, color, count, testid }) {
       {count > 0 && (
         <span className="absolute -top-1.5 -right-1.5 h-5 min-w-5 rounded-full bg-red-500 text-white text-xs font-bold flex items-center justify-center px-1">
           {count > 99 ? "99+" : count}
+        </span>
+      )}
+      {/* Cross-portal affordance: indicate this shortcut leaves the current portal */}
+      {crossPortal && count == null && (
+        <span
+          className="absolute top-1.5 right-1.5 text-muted-foreground/50 group-hover:text-foreground transition-colors"
+          aria-label="Pindah portal"
+        >
+          <ArrowUpRight className="h-3.5 w-3.5" />
         </span>
       )}
       <div
@@ -449,6 +437,9 @@ export default function OwnerHome() {
         <div className="flex items-center gap-2 mb-3">
           <Zap className="h-4 w-4 text-muted-foreground" />
           <span className="text-sm font-semibold">Akses Cepat</span>
+          <span className="ml-auto inline-flex items-center gap-1 text-[11px] text-muted-foreground">
+            <ArrowUpRight className="h-3 w-3" /> pindah ke portal lain
+          </span>
         </div>
         <div
           className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3"
@@ -457,19 +448,19 @@ export default function OwnerHome() {
           <ShortcutCard to="/executive/analytics"  icon={BarChart3}    label="Analytics"        color="aurora-1" />
           <ShortcutCard to="/executive/anomaly"     icon={AlertTriangle} label="Anomali"         color="aurora-4" count={openAnomalies} />
           <ShortcutCard to="/executive/approvals"   icon={CheckSquare}  label="Approvals"        color="aurora-6" count={totalPending} />
-          <ShortcutCard to="/finance"               icon={CreditCard}   label="Finance"          color="aurora-2" />
-          <ShortcutCard to="/finance/ap"            icon={FileText}     label="AP Invoice"       color="aurora-3" />
-          <ShortcutCard to="/finance/ar"            icon={FileText}     label="AR Invoice"       color="aurora-5" />
-          <ShortcutCard to="/procurement"           icon={ShoppingCart} label="Procurement"      color="aurora-1" />
-          <ShortcutCard to="/inventory"             icon={Package}      label="Inventory"        color="aurora-2" />
-          <ShortcutCard to="/hr"                    icon={Users}        label="HR"               color="aurora-3" />
-          <ShortcutCard to="/outlet"                icon={Building2}    label="Outlet"           color="aurora-4" />
+          <ShortcutCard to="/finance"               icon={CreditCard}   label="Finance"          color="aurora-2" crossPortal />
+          <ShortcutCard to="/finance/ap"            icon={FileText}     label="AP Invoice"       color="aurora-3" crossPortal />
+          <ShortcutCard to="/finance/ar"            icon={FileText}     label="AR Invoice"       color="aurora-5" crossPortal />
+          <ShortcutCard to="/procurement"           icon={ShoppingCart} label="Procurement"      color="aurora-1" crossPortal />
+          <ShortcutCard to="/inventory"             icon={Package}      label="Inventory"        color="aurora-2" crossPortal />
+          <ShortcutCard to="/hr"                    icon={Users}        label="HR"               color="aurora-3" crossPortal />
+          <ShortcutCard to="/outlet"                icon={Building2}    label="Outlet"           color="aurora-4" crossPortal />
           <ShortcutCard to="/executive/budget-approvals" icon={ClipboardList} label="Budget Approval" color="aurora-5" />
           <ShortcutCard to="/executive/budget-monitor"   icon={Activity}      label="Budget Monitor"  color="aurora-6" />
           <ShortcutCard to="/executive/profit-walk" icon={TrendingUp}   label="Profit Walk"      color="aurora-1" />
           <ShortcutCard to="/executive/period-compare" icon={BarChart3} label="Period Compare"   color="aurora-2" />
           <ShortcutCard to="/executive/brand"       icon={Star}         label="Brand Mix"        color="aurora-3" />
-          <ShortcutCard to="/admin"                 icon={Settings}     label="Admin"            color="aurora-4" testid="shortcut-admin" />
+          <ShortcutCard to="/admin"                 icon={Settings}     label="Admin"            color="aurora-4" testid="shortcut-admin" crossPortal />
         </div>
       </motion.div>
 

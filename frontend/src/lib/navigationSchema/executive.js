@@ -82,19 +82,12 @@ export const executiveNav = {
     },
     {
       id: "performance",
-      name: "Performance",
+      name: "Performance Analytics",
       icon: TrendingUp,
       items: [
-        { id: "brand-mix", name: "Brand Mix", path: "/executive/brand" },
-        { id: "profit-walk", name: "Profit Walk", path: "/executive/profit-walk" },
-      ],
-    },
-    {
-      id: "analytics",
-      name: "Analytics",
-      icon: BarChart3,
-      items: [
-        { id: "period-compare", name: "Period Compare", path: "/executive/period-compare" },
+        { id: "analytics-hub", name: "Performance Analytics", path: "/executive/analytics-hub" },
+        // Brand Mix · Profit Walk · Period Compare are in-page TABS of
+        // /executive/analytics-hub (consolidated to keep Executive sidebar <=12 items).
       ],
     },
     {

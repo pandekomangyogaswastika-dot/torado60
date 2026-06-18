@@ -11,7 +11,7 @@ const LABELS = {
   awaiting_approval: "Menunggu Approval", converted: "Converted",
 };
 
-export default function StatusPill({ status, className }) {
+export default function StatusPill({ status, className, label }) {
   if (!status) return <span className="text-muted-foreground">—</span>;
   const key = status.toLowerCase();
   return (
@@ -20,7 +20,7 @@ export default function StatusPill({ status, className }) {
       `status-${key}`,
       className,
     )}>
-      {LABELS[key] || status}
+      {label || LABELS[key] || status}
     </span>
   );
 }

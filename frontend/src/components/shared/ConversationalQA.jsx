@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import api, { unwrap } from "@/lib/api";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import VoiceInputButton from "@/components/shared/VoiceInputButton";
 import KpiSnapshotStrip from "@/components/shared/KpiSnapshotStrip";
 import { useAuth } from "@/lib/auth";
@@ -35,18 +36,33 @@ const SUGGESTIONS_EXEC = [
   "Berapa item yang stoknya di bawah par?",
 ];
 
-export default function ConversationalQA({ scopeLabel, showKpi = true }) {
+export default function ConversationalQA({ scopeLabel, showKpi = true, collapsible = false }) {
   const { user, can } = useAuth();
   const [question, setQuestion] = useState("");
   const [history, setHistory] = useState([]);
   const [sessionId, setSessionId] = useState(null);
   const [busy, setBusy] = useState(false);
   const [expandedTools, setExpandedTools] = useState({});
+  const [collapsed, setCollapsed] = useState(() => {
+    if (!collapsible) return false;
+    try {
+      const v = localStorage.getItem("aurora_ai_qa_collapsed");
+      return v == null ? true : v === "1";
+    } catch { return true; }
+  });
   const scrollRef = useRef(null);
   const inputRef = useRef(null);
 
   const isOwner = !!can?.("owner.cockpit.access");
   const SUGGESTIONS = useMemo(() => isOwner ? SUGGESTIONS_OWNER : SUGGESTIONS_EXEC, [isOwner]);
+
+  function toggleCollapsed() {
+    setCollapsed(c => {
+      const next = !c;
+      try { localStorage.setItem("aurora_ai_qa_collapsed", next ? "1" : "0"); } catch { /* ignore */ }
+      return next;
+    });
+  }
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -96,7 +112,24 @@ export default function ConversationalQA({ scopeLabel, showKpi = true }) {
   }
 
   return (
-    <div className="glass-card p-5 flex flex-col h-[560px]" data-testid="exec-qa">
+    <>
+    {collapsible && collapsed ? (
+      <button
+        type="button"
+        onClick={toggleCollapsed}
+        className="glass-card w-full px-4 h-11 flex items-center gap-2 hover:bg-foreground/5 transition text-left"
+        data-testid="exec-qa-collapsed"
+        aria-expanded={false}
+      >
+        <Sparkles className="h-4 w-4 text-violet-500 shrink-0" />
+        <span className="text-sm font-semibold">Asisten AI {scopeLabel || "Eksekutif"}</span>
+        <span className="text-xs text-muted-foreground hidden sm:inline truncate">— tanya KPI, anomali, vendor, cashflow…</span>
+        <span className="ml-auto inline-flex items-center gap-1 text-xs text-muted-foreground">
+          Buka <ChevronDown className="h-4 w-4" />
+        </span>
+      </button>
+    ) : (
+    <div className={cn("glass-card p-5 flex flex-col", collapsible ? "h-[460px]" : "h-[560px]")} data-testid="exec-qa">
       <div className="flex items-center justify-between mb-3">
         <div>
           <h3 className="font-semibold inline-flex items-center gap-2">
@@ -106,13 +139,22 @@ export default function ConversationalQA({ scopeLabel, showKpi = true }) {
             Tanya pakai teks atau voice (id-ID) — dijawab dalam Bahasa Indonesia.
           </p>
         </div>
-        {history.length > 0 && (
-          <Button size="sm" variant="outline"
-            onClick={reset} className="h-8 rounded-full gap-1"
-            data-testid="exec-qa-reset">
-            <RotateCcw className="h-3 w-3" /> Sesi Baru
-          </Button>
-        )}
+        <div className="flex items-center gap-2">
+          {history.length > 0 && (
+            <Button size="sm" variant="outline"
+              onClick={reset} className="h-8 rounded-full gap-1"
+              data-testid="exec-qa-reset">
+              <RotateCcw className="h-3 w-3" /> Sesi Baru
+            </Button>
+          )}
+          {collapsible && (
+            <Button size="sm" variant="ghost"
+              onClick={toggleCollapsed} className="h-8 rounded-full gap-1"
+              data-testid="exec-qa-collapse">
+              <ChevronUp className="h-3 w-3" /> Tutup
+            </Button>
+          )}
+        </div>
       </div>
 
       {showKpi && <div className="mb-3"><KpiSnapshotStrip /></div>}
@@ -228,5 +270,7 @@ export default function ConversationalQA({ scopeLabel, showKpi = true }) {
         </Button>
       </form>
     </div>
+    )}
+    </>
   );
 }
